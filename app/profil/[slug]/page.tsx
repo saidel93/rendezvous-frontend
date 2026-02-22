@@ -89,24 +89,31 @@ export default async function ProfilePage({ params }: { params: { slug: string }
             )}
           </div>
 
-          {/* ── Info ──────────────────────────────────────────────────────── */}
+{/* ── Info ──────────────────────────────────────────────────────── */}
           <div>
-            {/* H1 = SEO title (custom or auto-generated) */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 6 }}>
-              <h1 style={{ fontSize: '2rem', color: 'white', lineHeight: 1.2, fontFamily: "'Playfair Display',serif" }}>
-                {pageTitle}
-              </h1>
+            {/* Big hero title — custom from Sanity or fallback */}
+            <h1 style={{ fontSize: 'clamp(1.6rem,3.5vw,2.4rem)', color: 'white', lineHeight: 1.15, fontFamily: "'Playfair Display',serif", fontStyle: 'italic', marginBottom: 16 }}>
+              {p.heroTitle || p.tagline || `${p.nom}, ${p.age} ans`}
+            </h1>
+
+            {/* Name / age / online — now below the hero title */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
+                <span style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.5rem', fontWeight: 700, color: 'white' }}>{p.nom}</span>
+                <span style={{ color: 'rgba(255,255,255,.6)', fontSize: '1.1rem' }}>{p.age} ans</span>
+                {p.ville && (
+                  <Link href={`/regions/${p.ville.slug.current}`} style={{ color: '#93c5fd', textDecoration: 'none', fontSize: '.88rem' }}>
+                    📍 {p.ville.nom}
+                  </Link>
+                )}
+              </div>
+              {p.online && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(34,197,94,.08)', border: '1px solid rgba(34,197,94,.2)', borderRadius: 50, padding: '5px 12px', fontSize: '.75rem', color: '#86efac', fontWeight: 600, flexShrink: 0 }}>          
               {p.online && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(34,197,94,.08)', border: '1px solid rgba(34,197,94,.2)', borderRadius: 50, padding: '5px 12px', fontSize: '.75rem', color: '#86efac', fontWeight: 600, flexShrink: 0, marginTop: 6 }}>
                   <span style={{ width: 7, height: 7, background: '#22c55e', borderRadius: '50%' }} /> En ligne
                 </div>
               )}
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#7c8590', marginBottom: 14, flexWrap: 'wrap' }}>
-              <span style={{ fontSize: '1.4rem', fontWeight: 700, color: 'white' }}>{p.age} ans</span>
-              <span>·</span>
-              {p.ville && <Link href={`/regions/${p.ville.slug.current}`} style={{ color: '#93c5fd', textDecoration: 'none' }}>📍 {p.ville.nom}</Link>}
             </div>
 
             <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>

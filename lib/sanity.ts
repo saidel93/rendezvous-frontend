@@ -60,7 +60,7 @@ const F = `
   _id, slug, nom, age,
   ville->{_id, nom, slug, region},
   categorie->{_id, nom, slug, emoji},
-  tagline, seoTitle, seoDescription,
+  tagline, heroTitle, seoTitle, seoDescription,
   photoUrl,
   photo{ asset->{_ref, _id, url}, ... },
   verifie, online, vedette,

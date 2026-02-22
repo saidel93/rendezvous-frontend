@@ -28,6 +28,7 @@ export interface Profile {
   categorie: Categorie
   tagline: string
   bio?: string
+  heroTitle?: string
   seoTitle?: string
   seoDescription?: string
   photoUrl?: string

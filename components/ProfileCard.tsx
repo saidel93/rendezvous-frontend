@@ -3,6 +3,8 @@ import { getPhotoSrc } from '@/lib/sanity'
 import type { Profile } from '@/lib/types'
 
 export default function ProfileCard({ p }: { p: Profile }) {
+  if (!p?.slug?.current) return null
+
   const photo = getPhotoSrc(p)
   return (
     <Link href={`/profil/${p.slug.current}`} style={{ textDecoration: 'none', display: 'block', borderRadius: 16, overflow: 'hidden', background: 'rgba(21,25,32,.85)', border: '1px solid rgba(255,255,255,.07)', transition: 'transform .2s,box-shadow .2s', position: 'relative' }}>
@@ -10,10 +12,9 @@ export default function ProfileCard({ p }: { p: Profile }) {
       <div style={{ position: 'relative', aspectRatio: '2/3', overflow: 'hidden' }}>
         <img
           src={photo}
-          alt={`${p.nom}, ${p.age} ans`}
+          alt={`${p.nom || 'Profil'}, ${p.age || ''} ans`}
           style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
         />
-        {/* Gradient overlay */}
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(12,15,20,1) 0%, rgba(12,15,20,.4) 45%, transparent 100%)' }} />
 
         {/* Top badges */}

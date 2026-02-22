@@ -113,18 +113,18 @@ a { color: inherit; }
 /* ─── Grids ──────────────────────────────────────────────────────────────── */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
 }
 .city-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
 }
 .cat-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
 }
 .tag-grid {
   display: grid;
@@ -153,37 +153,12 @@ a { color: inherit; }
   .layout-profile  { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
-  .card-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .city-grid { grid-template-columns: repeat(2, 1fr); }
-  .cat-grid  { grid-template-columns: 1fr; }
+  .card-grid { grid-template-columns: repeat(3, 1fr); gap: 7px; }
+  .city-grid { grid-template-columns: repeat(3, 1fr); gap: 7px; }
+  .cat-grid  { grid-template-columns: repeat(2, 1fr); gap: 7px; }
   .tag-grid  { grid-template-columns: 1fr; }
 }
-/* ─── Annonces page ──────────────────────────────────────────────────────── */
-.annonces-layout {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 24px;
-  align-items: start;
-}
-.annonces-sidebar {
-  display: block;
-}
-.annonces-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-  gap: 12px;
-}
-.mobile-filters {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .annonces-layout  { display: block; }
-  .annonces-sidebar { display: none !important; }
-  .annonces-grid    { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
-  .mobile-filters   { display: flex !important; }
-}
-
 @media (max-width: 380px) {
-  .annonces-grid { grid-template-columns: 1fr !important; }
+  .card-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .city-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
 }

@@ -52,8 +52,9 @@ export default async function ProfilePage({ params }: { params: { slug: string }
   const gallery    = getGalleryUrls(p)
   const affLink    = getAffiliateUrl(p, settings)
   const pageTitle  = getProfileMetaTitle(p)
-  const sameCity   = related.filter((x: Profile) => x._id !== p!._id && x.ville?._id === p!.ville?._id).slice(0, 4)
-
+const sameCity = related
+    .filter((x: Profile) => x._id !== p!._id && x.ville?._id === p!.ville?._id)
+    .slice(0, 4)
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '40px 20px' }}>

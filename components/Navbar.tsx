@@ -7,7 +7,7 @@ import type { Ville, Categorie } from '@/lib/types'
 export default function Navbar() {
   const [cities, setCities]         = useState<Ville[]>([])
   const [cats, setCats]             = useState<Categorie[]>([])
-  const [open, setOpen]             = useState<string | null>(anull)
+  const [open, setOpen]             = useState('')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [q, setQ]                   = useState('')
 
@@ -15,13 +15,13 @@ export default function Navbar() {
     client.fetch(ALL_CITIES_QUERY).then(setCities).catch(() => {})
     client.fetch(ALL_CATEGORIES_QUERY).then(setCats).catch(() => {})
     const handler = (e: MouseEvent) => {
-      if (!(e.target as Element).closest('[data-dropdown]')) setOpen(null)
+      if (!(e.target as Element).closest('[data-dropdown]')) setOpen('')
     }
     document.addEventListener('click', handler)
     return () => document.removeEventListener('click', handler)
   }, [])
 
-  const close = () => { setOpen(null); setMobileOpen(false) }
+  const close = () => { setOpen(''); setMobileOpen(false) }
 
   const topBar: React.CSSProperties = {
     background: 'rgba(8,10,16,.99)',
@@ -114,7 +114,7 @@ export default function Navbar() {
           {/* Régions dropdown */}
           <div data-dropdown="reg" style={{ position: 'relative', height: 44, display: 'flex', alignItems: 'center' }}>
             <button
-              onClick={() => setOpen(open === 'reg' ? null : 'reg')}
+              onClick={() => setOpen(open === 'reg' ? '' : 'reg')}
               style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '0 16px', height: 44, background: 'transparent', border: 'none', borderRight: '1px solid rgba(255,255,255,.05)', color: open === 'reg' ? '#fb7185' : '#9ba3af', fontSize: '.82rem', fontWeight: 500, cursor: 'pointer', fontFamily: "'Figtree',sans-serif" }}
             >
               📍 Régions <span style={{ fontSize: '.6rem' }}>▾</span>
@@ -135,7 +135,7 @@ export default function Navbar() {
           {/* Catégories dropdown */}
           <div data-dropdown="cat" style={{ position: 'relative', height: 44, display: 'flex', alignItems: 'center' }}>
             <button
-              onClick={() => setOpen(open === 'cat' ? null : 'cat')}
+              onClick={() => setOpen(open === 'cat' ? '' : 'cat')}
               style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '0 16px', height: 44, background: 'transparent', border: 'none', borderRight: '1px solid rgba(255,255,255,.05)', color: open === 'cat' ? '#fb7185' : '#9ba3af', fontSize: '.82rem', fontWeight: 500, cursor: 'pointer', fontFamily: "'Figtree',sans-serif" }}
             >
               💝 Catégories <span style={{ fontSize: '.6rem' }}>▾</span>

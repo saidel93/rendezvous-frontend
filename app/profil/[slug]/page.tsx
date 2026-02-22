@@ -48,13 +48,14 @@ export default async function ProfilePage({ params }: { params: { slug: string }
 
   if (!p) notFound()
 
-  const mainPhoto  = getPhotoSrc(p, 600, 750)
-  const gallery    = getGalleryUrls(p)
-  const affLink    = getAffiliateUrl(p, settings)
-  const pageTitle  = getProfileMetaTitle(p)
-const sameCity = related
+  const mainPhoto = getPhotoSrc(p, 600, 750)
+  const gallery   = getGalleryUrls(p)
+  const affLink   = getAffiliateUrl(p, settings)
+
+  const sameCity = related
     .filter((x: Profile) => x._id !== p!._id && x.ville?._id === p!.ville?._id)
     .slice(0, 4)
+
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '40px 20px' }}>
@@ -90,33 +91,33 @@ const sameCity = related
             )}
           </div>
 
-{/* ── Info ──────────────────────────────────────────────────────── */}
+          {/* ── Info ──────────────────────────────────────────────────────── */}
           <div>
-            {/* Big hero title — custom from Sanity or fallback */}
-            <h1 style={{ fontSize: 'clamp(1.6rem,3.5vw,2.4rem)', color: 'white', lineHeight: 1.15, fontFamily: "'Playfair Display',serif", fontStyle: 'italic', marginBottom: 16 }}>
+
+            {/* Big hero title — heroTitle from Sanity, fallback to tagline or name */}
+            <h1 style={{ fontSize: 'clamp(1.55rem,3.2vw,2.3rem)', color: 'white', lineHeight: 1.15, fontFamily: "'Playfair Display',serif", fontStyle: 'italic', marginBottom: 18 }}>
               {p.heroTitle || p.tagline || `${p.nom}, ${p.age} ans`}
             </h1>
 
-            {/* Name / age / online — now below the hero title */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 10 }}>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
-                <span style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.5rem', fontWeight: 700, color: 'white' }}>{p.nom}</span>
-                <span style={{ color: 'rgba(255,255,255,.6)', fontSize: '1.1rem' }}>{p.age} ans</span>
+            {/* Name / age / city / online — below the hero title */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 14, flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
+                <span style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.45rem', fontWeight: 700, color: 'white' }}>{p.nom}</span>
+                <span style={{ color: 'rgba(255,255,255,.55)', fontSize: '1rem' }}>{p.age} ans</span>
                 {p.ville && (
-                  <Link href={`/regions/${p.ville.slug.current}`} style={{ color: '#93c5fd', textDecoration: 'none', fontSize: '.88rem' }}>
+                  <Link href={`/regions/${p.ville.slug.current}`} style={{ color: '#93c5fd', textDecoration: 'none', fontSize: '.85rem' }}>
                     📍 {p.ville.nom}
                   </Link>
                 )}
               </div>
               {p.online && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(34,197,94,.08)', border: '1px solid rgba(34,197,94,.2)', borderRadius: 50, padding: '5px 12px', fontSize: '.75rem', color: '#86efac', fontWeight: 600, flexShrink: 0 }}>          
-              {p.online && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(34,197,94,.08)', border: '1px solid rgba(34,197,94,.2)', borderRadius: 50, padding: '5px 12px', fontSize: '.75rem', color: '#86efac', fontWeight: 600, flexShrink: 0, marginTop: 6 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(34,197,94,.08)', border: '1px solid rgba(34,197,94,.2)', borderRadius: 50, padding: '5px 12px', fontSize: '.75rem', color: '#86efac', fontWeight: 600, flexShrink: 0 }}>
                   <span style={{ width: 7, height: 7, background: '#22c55e', borderRadius: '50%' }} /> En ligne
                 </div>
               )}
             </div>
 
+            {/* Category + city badges */}
             <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
               {p.categorie && (
                 <Link href={`/categories/${p.categorie.slug.current}`} style={{ background: 'rgba(201,145,58,.1)', border: '1px solid rgba(201,145,58,.25)', color: '#e8b96a', fontSize: '.78rem', padding: '5px 12px', borderRadius: 50, fontWeight: 600, textDecoration: 'none' }}>
@@ -130,6 +131,7 @@ const sameCity = related
               )}
             </div>
 
+            {/* Verification badges */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 18 }}>
               {p.verifie?.photo     && <span style={{ fontSize: '.72rem', padding: '4px 10px', borderRadius: 20, background: 'rgba(201,145,58,.2)', border: '1px solid rgba(201,145,58,.4)', color: '#e8b96a', fontWeight: 600 }}>✓ Photo vérifiée</span>}
               {p.verifie?.premium   && <span style={{ fontSize: '.72rem', padding: '4px 10px', borderRadius: 20, background: 'rgba(168,85,247,.15)', border: '1px solid rgba(168,85,247,.35)', color: '#d8b4fe', fontWeight: 600 }}>★ Premium</span>}
@@ -137,10 +139,12 @@ const sameCity = related
               {p.verifie?.telephone && <span style={{ fontSize: '.72rem', padding: '4px 10px', borderRadius: 20, background: 'rgba(34,197,94,.1)', border: '1px solid rgba(34,197,94,.35)', color: '#86efac', fontWeight: 600 }}>📱 Téléphone</span>}
             </div>
 
+            {/* Tagline quote */}
             <blockquote style={{ borderLeft: '3px solid #e11d48', paddingLeft: 14, marginBottom: 18 }}>
-              <p style={{ fontFamily: "'Playfair Display',serif", fontStyle: 'italic', fontSize: '1.1rem', color: 'rgba(255,255,255,.75)' }}>"{p.tagline}"</p>
+              <p style={{ fontFamily: "'Playfair Display',serif", fontStyle: 'italic', fontSize: '1.05rem', color: 'rgba(255,255,255,.75)' }}>"{p.tagline}"</p>
             </blockquote>
 
+            {/* Stats */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 18 }}>
               <div style={{ background: 'rgba(255,255,255,.035)', border: '1px solid rgba(255,255,255,.07)', borderRadius: 12, padding: 12, textAlign: 'center' }}>
                 <span style={{ color: '#3e444d', fontSize: '.68rem', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4, display: 'block' }}>Membre depuis</span>
@@ -152,10 +156,12 @@ const sameCity = related
               </div>
             </div>
 
+            {/* Bio */}
             {p.bio && (
               <p style={{ color: '#7c8590', fontSize: '.86rem', lineHeight: 1.8, marginBottom: 18, whiteSpace: 'pre-wrap' }}>{p.bio}</p>
             )}
 
+            {/* Tags */}
             {p.tags && p.tags.length > 0 && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 24 }}>
                 {p.tags.map((t: string) => (
@@ -164,13 +170,13 @@ const sameCity = related
               </div>
             )}
 
-            {/* CTA — always uses resolved affiliate URL */}
+            {/* CTA */}
             <div style={{ background: 'rgba(255,255,255,.035)', border: '1px solid rgba(225,29,72,.2)', borderRadius: 18, padding: 22 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 14, fontSize: '.83rem', color: '#86efac', fontWeight: 500 }}>
                 <span style={{ width: 8, height: 8, background: '#22c55e', borderRadius: '50%', display: 'inline-block' }} />
                 {p.nom} est active et pourrait répondre bientôt
               </div>
-              <a
+              
                 href={affLink}
                 target="_blank"
                 rel="noopener noreferrer sponsored"

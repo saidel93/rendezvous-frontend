@@ -51,10 +51,7 @@ export default async function ProfilePage({ params }: { params: { slug: string }
   const mainPhoto = getPhotoSrc(p, 600, 750)
   const gallery   = getGalleryUrls(p)
   const affLink   = getAffiliateUrl(p, settings)
-
-  const sameCity = related
-    .filter((x: Profile) => x._id !== p!._id && x.ville?._id === p!.ville?._id)
-    .slice(0, 4)
+  const sameCity  = related.filter((x: Profile) => x._id !== p!._id && x.ville?._id === p!.ville?._id).slice(0, 4)
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
@@ -94,12 +91,12 @@ export default async function ProfilePage({ params }: { params: { slug: string }
           {/* ── Info ──────────────────────────────────────────────────────── */}
           <div>
 
-            {/* Big hero title — heroTitle from Sanity, fallback to tagline or name */}
+            {/* Big hero title */}
             <h1 style={{ fontSize: 'clamp(1.55rem,3.2vw,2.3rem)', color: 'white', lineHeight: 1.15, fontFamily: "'Playfair Display',serif", fontStyle: 'italic', marginBottom: 18 }}>
               {p.heroTitle || p.tagline || `${p.nom}, ${p.age} ans`}
             </h1>
 
-            {/* Name / age / city / online — below the hero title */}
+            {/* Name / age / city / online */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 14, flexWrap: 'wrap' }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
                 <span style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.45rem', fontWeight: 700, color: 'white' }}>{p.nom}</span>

@@ -113,7 +113,7 @@ a { color: inherit; }
 /* ─── Grids ──────────────────────────────────────────────────────────────── */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 18px;
 }
 .city-grid {
@@ -170,8 +170,8 @@ a { color: inherit; }
 }
 .annonces-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 12px;
 }
 .mobile-filters {
   display: none;

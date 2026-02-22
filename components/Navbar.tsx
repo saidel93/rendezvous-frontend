@@ -134,8 +134,7 @@ export default function Navbar() {
           </div>
 
           <Link href="/tags" className="nav-link" style={{ display: 'flex', alignItems: 'center', padding: '0 16px', height: 44, color: '#9ba3af', fontSize: '.82rem', fontWeight: 500, textDecoration: 'none' }}>🏷️ Tags</Link>
-          <Link href="/legal" className="nav-link" style={{ display: 'flex', alignItems: 'center', padding: '0 16px', height: 44, color: '#9ba3af', fontSize: '.82rem', fontWeight: 500, textDecoration: 'none' }}>⚖️ Légal</Link>
-        </div>
+<Link href="/blog" className="nav-link" style={{ display: 'flex', alignItems: 'center', padding: '0 16px', height: 44, color: '#9ba3af', fontSize: '.82rem', fontWeight: 500, textDecoration: 'none' }}>📝 Blog</Link>        </div>
       </div>
 
       {/* ── MOBILE FULL-SCREEN MENU ───────────────────────────────────────── */}
@@ -167,7 +166,7 @@ export default function Navbar() {
           { href: '/regions',    label: '📍 Toutes les régions' },
           { href: '/categories', label: '💝 Toutes les catégories' },
           { href: '/tags',       label: '🏷️ Tags' },
-          { href: '/legal',      label: '⚖️ Informations légales' },
+          { href: '/blog',       label: '📝 Blog' },
         ].map(item => (
           <Link key={item.href} href={item.href} onClick={close} style={{ display: 'flex', alignItems: 'center', padding: '15px 24px', color: '#d1d5db', fontSize: '1rem', fontWeight: 500, textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,.05)' }}>
             {item.label}

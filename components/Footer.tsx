@@ -42,11 +42,16 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ── Full legal text ── */}
-        <div style={{ borderTop: '1px solid rgba(255,255,255,.06)', paddingTop: 32, marginBottom: 28 }}>
+        {/* ── Minimal legal text ── */}
+        <div style={{ borderTop: '1px solid rgba(255,255,255,.04)', paddingTop: 20, marginBottom: 20 }}>
+          <p style={{ color: '#374151', fontSize: '.7rem', lineHeight: 1.7, marginBottom: 8 }}>
+            ⚠️ <strong style={{ color: '#4b5563' }}>Affiliation :</strong> Ce site perçoit une commission sur les inscriptions via les liens partenaires, sans coût supplémentaire pour vous.
+            &nbsp;&nbsp;ℹ️ <strong style={{ color: '#4b5563' }}>Annuaire vitrine :</strong> Aucun contact direct — les profils redirigent vers des plateformes partenaires.
+            &nbsp;&nbsp;🔞 Réservé aux adultes de 18 ans et plus.
+          </p>
+        </div>
 
-          {/* Affiliate disclosure */}
-          <div style={{ background: 'rgba(251,191,36,.05)', border: '1px solid rgba(251,191,36,.15)', borderRadius: 12, padding: '16px 20px', marginBottom: 20 }}>
+        {/* Bottom bar */}
             <p style={{ color: '#fbbf24', fontWeight: 700, fontSize: '.75rem', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8, fontFamily: "'Figtree',sans-serif" }}>
               ⚠️ Divulgation d'affiliation
             </p>

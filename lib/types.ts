@@ -24,6 +24,8 @@ export interface Profile {
   categorie: Categorie
   tagline: string
   bio?: string
+  seoTitle?: string
+  seoDescription?: string
   photoUrl?: string
   photo?: any
   photosUrls?: { url: string; alt?: string }[]
@@ -34,5 +36,11 @@ export interface Profile {
   membreDepuis?: string
   derniereActivite?: string
   tags?: string[]
+  affiliateUrl?: string
+}
+
+export interface SiteSettings {
   affiliateUrl: string
+  siteName: string
+  siteDescription: string
 }

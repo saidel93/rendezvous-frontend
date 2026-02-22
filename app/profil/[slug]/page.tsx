@@ -97,7 +97,7 @@ export default async function ProfilePage({ params }: { params: { slug: string }
             {/* H1 = SEO title (custom or auto-generated) */}
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 6 }}>
               <h1 style={{ fontSize: '2rem', color: 'white', lineHeight: 1.2, fontFamily: "'Playfair Display',serif" }}>
-                {pageTitle}
+                {p.heroTitle || p.tagline || `${p.nom}, ${p.age} ans`}
               </h1>
               {p.online && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(34,197,94,.08)', border: '1px solid rgba(34,197,94,.2)', borderRadius: 50, padding: '5px 12px', fontSize: '.75rem', color: '#86efac', fontWeight: 600, flexShrink: 0, marginTop: 6 }}>

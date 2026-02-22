@@ -36,7 +36,7 @@ export default async function HomePage() {
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', width: '100%', textAlign: 'center' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(225,29,72,.08)', border: '1px solid rgba(225,29,72,.2)', borderRadius: 50, padding: '7px 16px', fontSize: '.82rem', color: '#7c8590', marginBottom: 28 }}>
             <span style={{ width: 7, height: 7, background: '#22c55e', borderRadius: '50%', display: 'inline-block' }} />
-            <strong style={{ color: '#86efac' }}>87</strong> membres en ligne dans votre région
+            <strong style={{ color: '#86efac' }}>{Math.floor(Math.random() * 71) + 50}</strong> membres en ligne dans votre région
           </div>
           <h1 className="hero-title" style={{ marginBottom: 20 }}>
             Trouvez votre<br />
@@ -48,7 +48,7 @@ export default async function HomePage() {
             <Link href="/regions" style={{ background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.1)', color: 'white', padding: '14px 32px', borderRadius: 14, fontSize: '.95rem', fontWeight: 600, textDecoration: 'none' }}>📍 Par région</Link>
           </div>
           <div className="hero-stats">
-            {[['122+', 'Membres actifs'], ['9', 'Villes'], ['6', 'Catégories']].map(([n, l]) => (
+          {[['1 200+', 'Membres actifs'], ['9', 'Villes'], ['6', 'Catégories']].map(([n, l]) => (
               <div key={l} style={{ textAlign: 'center' }}>
                 <span style={{ fontFamily: "'Playfair Display',serif", fontSize: '2rem', fontWeight: 700, display: 'block', background: 'linear-gradient(135deg,#fb7185,#e11d48)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{n}</span>
                 <span style={{ color: '#3e444d', fontSize: '.78rem' }}>{l}</span>

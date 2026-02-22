@@ -10,8 +10,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   try {
     const city: Ville = await client.fetch(CITY_BY_SLUG_QUERY, { slug: params.slug })
     if (!city) return { title: 'Région' }
-    const title = `Rencontres à ${city.nom} – Célibataires ${city.nom}, Québec`
-    const desc = `Trouvez des célibataires vérifiés à ${city.nom}. Profils authentiques pour des rencontres sérieuses ou légères dans la région de ${city.nom}, ${city.region}. Inscrivez-vous gratuitement.`
+    const title = city.seoTitle || `Rencontres à ${city.nom} – Célibataires ${city.nom}, Québec`
+    const desc = city.seoDescription || `Rencontrez des célibataires à ${city.nom}. Profils vérifiés, hommes et femmes de ${city.region || 'Québec'} sur RendezVous Québec.`
     return { title, description: desc, openGraph: { title, description: desc } }
   } catch (e) { return { title: 'Région' } }
 }

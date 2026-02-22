@@ -10,6 +10,7 @@ export default function Navbar() {
   const [open, setOpen]             = useState('')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [q, setQ]                   = useState('')
+  const [onlineCount] = useState(() => Math.floor(Math.random() * 71) + 50))
 
   useEffect(() => {
     client.fetch(ALL_CITIES_QUERY).then(setCities).catch(() => {})
@@ -77,7 +78,7 @@ export default function Navbar() {
             {/* Online badge – hidden on mobile */}
             <div className="nav-online" style={{ alignItems: 'center', gap: 6, background: 'rgba(34,197,94,.09)', border: '1px solid rgba(34,197,94,.28)', borderRadius: 50, padding: '6px 13px', fontSize: '.77rem', color: '#86efac', fontWeight: 600, whiteSpace: 'nowrap' }}>
               <span style={{ width: 7, height: 7, background: '#22c55e', borderRadius: '50%', display: 'inline-block', marginRight: 4 }} />
-              87 en ligne
+             {onlineCount} en ligne
             </div>
 
             {/* CTA */}
@@ -132,26 +133,7 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Catégories dropdown */}
-          <div data-dropdown="cat" style={{ position: 'relative', height: 44, display: 'flex', alignItems: 'center' }}>
-            <button
-              onClick={() => setOpen(open === 'cat' ? '' : 'cat')}
-              style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '0 16px', height: 44, background: 'transparent', border: 'none', borderRight: '1px solid rgba(255,255,255,.05)', color: open === 'cat' ? '#fb7185' : '#9ba3af', fontSize: '.82rem', fontWeight: 500, cursor: 'pointer', fontFamily: "'Figtree',sans-serif" }}
-            >
-              💝 Catégories <span style={{ fontSize: '.6rem' }}>▾</span>
-            </button>
-            {open === 'cat' && (
-              <div className="dropdown-panel" style={{ position: 'absolute', top: '100%', left: 0, background: '#0e1118', border: '1px solid rgba(255,255,255,.1)', borderTop: '2px solid #e11d48', borderRadius: '0 0 14px 14px', minWidth: 260, zIndex: 400, paddingBottom: 8, boxShadow: '0 24px 60px rgba(0,0,0,.7)' }}>
-                <div style={{ color: '#4b5563', fontSize: '.63rem', fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', padding: '12px 16px 6px' }}>Type de rencontre</div>
-                {cats.map(c => (
-                  <Link key={c._id} href={`/categories/${c.slug.current}`} onClick={close} className="dropdown-link" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '9px 16px', color: '#9ba3af', fontSize: '.84rem', textDecoration: 'none' }}>
-                    <span>{c.emoji} {c.nom}</span>
-                    <span style={{ fontSize: '.69rem', background: 'rgba(225,29,72,.12)', border: '1px solid rgba(225,29,72,.25)', color: '#fb7185', borderRadius: 50, padding: '1px 8px' }}>{c.profileCount || 0}</span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
+        
 
           <Link href="/tags" className="nav-link" style={{ display: 'flex', alignItems: 'center', padding: '0 16px', height: 44, color: '#9ba3af', fontSize: '.82rem', fontWeight: 500, textDecoration: 'none' }}>🏷️ Tags</Link>
           <Link href="/legal" className="nav-link" style={{ display: 'flex', alignItems: 'center', padding: '0 16px', height: 44, color: '#9ba3af', fontSize: '.82rem', fontWeight: 500, textDecoration: 'none' }}>⚖️ Légal</Link>

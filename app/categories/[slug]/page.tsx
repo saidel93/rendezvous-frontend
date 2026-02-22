@@ -10,8 +10,8 @@ export async function generateMetadata({ params, searchParams }: { params: { slu
   try {
     const cat: Categorie = await client.fetch(CAT_BY_SLUG_QUERY, { slug: params.slug })
     if (!cat) return { title: 'Catégorie' }
-    let title = `${cat.nom} au Québec – Rencontres ${cat.emoji}`
-    let desc = cat.description || `Trouvez des célibataires pour des rencontres "${cat.nom}" au Québec. Profils vérifiés.`
+    let title = cat.seoTitle || `${cat.nom} au Québec – Rencontres ${cat.emoji}`
+    let desc = cat.seoDescription || cat.description || `Trouvez des célibataires pour des rencontres "${cat.nom}" au Québec. Profils vérifiés.`
     if (searchParams.city) {
       const cities: Ville[] = await client.fetch(ALL_CITIES_QUERY)
       const city = cities.find(c => c.slug.current === searchParams.city)

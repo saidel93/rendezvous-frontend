@@ -76,6 +76,6 @@ export const PROFILES_BY_CITY_QUERY = `*[_type=="profile"&&ville->slug.current==
 export const PROFILES_BY_CAT_QUERY  = `*[_type=="profile"&&categorie->slug.current==$catSlug]|order(_createdAt desc){${F}}`
 export const ALL_CITIES_QUERY       = `*[_type=="ville"]|order(nom asc){ _id, nom, slug, region, "profileCount": count(*[_type=="profile"&&ville._ref==^._id]) }`
 export const ALL_CATEGORIES_QUERY   = `*[_type=="categorie"]|order(nom asc){ _id, nom, slug, emoji, description, "profileCount": count(*[_type=="profile"&&categorie._ref==^._id]) }`
-export const CITY_BY_SLUG_QUERY     = `*[_type=="ville"&&slug.current==$slug][0]{ _id, nom, slug, region }`
-export const CAT_BY_SLUG_QUERY      = `*[_type=="categorie"&&slug.current==$slug][0]{ _id, nom, slug, emoji, description }`
+export const CITY_BY_SLUG_QUERY     = `*[_type=="ville"&&slug.current==$slug][0]{ _id, nom, slug, region, seoTitle, seoDescription }`
+export const CAT_BY_SLUG_QUERY      = `*[_type=="categorie"&&slug.current==$slug][0]{ _id, nom, slug, emoji, description, seoTitle, seoDescription }`
 export const SETTINGS_QUERY         = `*[_type=="settings"&&_id=="site-settings"][0]{ affiliateUrl, siteName, siteDescription }`

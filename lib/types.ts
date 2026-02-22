@@ -4,6 +4,8 @@ export interface Ville {
   slug: { current: string }
   region: string
   profileCount?: number
+  seoTitle?: string
+  seoDescription?: string
 }
 
 export interface Categorie {
@@ -13,6 +15,8 @@ export interface Categorie {
   emoji: string
   description?: string
   profileCount?: number
+  seoTitle?: string
+  seoDescription?: string
 }
 
 export interface Profile {

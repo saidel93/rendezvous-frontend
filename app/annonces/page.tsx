@@ -36,21 +36,43 @@ export default async function AnnoncesPage({ searchParams }: { searchParams: { c
     profiles = profiles.filter(p => p.nom.toLowerCase().includes(q) || p.tagline?.toLowerCase().includes(q) || p.ville?.nom.toLowerCase().includes(q))
   }
 
-  const S: React.CSSProperties = { color: '#7c8590', textDecoration: 'none', fontSize: '.83rem' }
+  const S: React.CSSProperties  = { color: '#7c8590', textDecoration: 'none', fontSize: '.83rem' }
   const SA: React.CSSProperties = { ...S, color: '#fb7185' }
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
+
+      {/* ── Page header ── */}
       <div style={{ padding: '40px 0 28px', background: 'linear-gradient(135deg,rgba(225,29,72,.06),transparent)', borderBottom: '1px solid rgba(255,255,255,.06)', marginBottom: 32 }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px' }}>
           <span style={{ color: '#3e444d', fontSize: '.78rem' }}>Accueil › <span style={{ color: '#fb7185' }}>Annonces</span></span>
-          <h1 style={{ fontSize: '2.2rem', color: 'white', marginTop: 8, marginBottom: 6 }}>Toutes les annonces</h1>
+          <h1 style={{ fontSize: 'clamp(1.6rem,4vw,2.2rem)', color: 'white', marginTop: 8, marginBottom: 6 }}>Toutes les annonces</h1>
           <p style={{ color: '#7c8590', fontSize: '.9rem' }}>{profiles.length} profil{profiles.length > 1 ? 's' : ''} vérifiés à travers le Québec</p>
         </div>
       </div>
 
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px 60px', display: 'grid', gridTemplateColumns: '240px 1fr', gap: 24, alignItems: 'start' }}>
-        <aside style={{ position: 'sticky', top: 120 }}>
+      {/* ── Mobile filter bar (chips) — shown only on mobile ── */}
+      <div className="mobile-filters" style={{ padding: '0 16px 16px', overflowX: 'auto', display: 'flex', gap: 8, flexWrap: 'nowrap' }}>
+        <Link href="/annonces" style={{ flexShrink: 0, padding: '7px 14px', borderRadius: 50, fontSize: '.78rem', fontWeight: 600, textDecoration: 'none', background: !searchParams.city && !searchParams.cat ? 'rgba(225,29,72,.2)' : 'rgba(255,255,255,.05)', border: `1px solid ${!searchParams.city && !searchParams.cat ? 'rgba(225,29,72,.5)' : 'rgba(255,255,255,.1)'}`, color: !searchParams.city && !searchParams.cat ? '#fb7185' : '#9ba3af', whiteSpace: 'nowrap' }}>
+          Tous
+        </Link>
+        {cities.map(c => (
+          <Link key={c._id} href={`/annonces?city=${c.slug.current}`} style={{ flexShrink: 0, padding: '7px 14px', borderRadius: 50, fontSize: '.78rem', fontWeight: 600, textDecoration: 'none', background: searchParams.city === c.slug.current ? 'rgba(225,29,72,.2)' : 'rgba(255,255,255,.05)', border: `1px solid ${searchParams.city === c.slug.current ? 'rgba(225,29,72,.5)' : 'rgba(255,255,255,.1)'}`, color: searchParams.city === c.slug.current ? '#fb7185' : '#9ba3af', whiteSpace: 'nowrap' }}>
+            📍 {c.nom}
+          </Link>
+        ))}
+        {cats.map(c => (
+          <Link key={c._id} href={`/annonces?cat=${c.slug.current}`} style={{ flexShrink: 0, padding: '7px 14px', borderRadius: 50, fontSize: '.78rem', fontWeight: 600, textDecoration: 'none', background: searchParams.cat === c.slug.current ? 'rgba(225,29,72,.2)' : 'rgba(255,255,255,.05)', border: `1px solid ${searchParams.cat === c.slug.current ? 'rgba(225,29,72,.5)' : 'rgba(255,255,255,.1)'}`, color: searchParams.cat === c.slug.current ? '#fb7185' : '#9ba3af', whiteSpace: 'nowrap' }}>
+            {c.emoji} {c.nom}
+          </Link>
+        ))}
+      </div>
+
+      {/* ── Main layout ── */}
+      <div className="annonces-layout" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px 60px' }}>
+
+        {/* Sidebar — hidden on mobile, shown on desktop */}
+        <aside className="annonces-sidebar" style={{ position: 'sticky', top: 120 }}>
           <form method="get" style={{ marginBottom: 14 }}>
             <div style={{ position: 'relative' }}>
               <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#7c8590' }}>🔍</span>
@@ -84,10 +106,11 @@ export default async function AnnoncesPage({ searchParams }: { searchParams: { c
           </div>
         </aside>
 
+        {/* Profile grid */}
         <div>
           <p style={{ color: 'white', fontWeight: 600, marginBottom: 20 }}>{profiles.length} profil{profiles.length > 1 ? 's' : ''} trouvé{profiles.length > 1 ? 's' : ''}</p>
           {profiles.length > 0 ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(260px,1fr))', gap: 18 }}>
+            <div className="annonces-grid">
               {profiles.map(p => <ProfileCard key={p._id} p={p} />)}
             </div>
           ) : (
@@ -97,6 +120,7 @@ export default async function AnnoncesPage({ searchParams }: { searchParams: { c
             </div>
           )}
         </div>
+
       </div>
     </div>
   )

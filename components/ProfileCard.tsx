@@ -7,7 +7,7 @@ export default function ProfileCard({ p }: { p: Profile }) {
   return (
     <Link href={`/profil/${p.slug.current}`} style={{ textDecoration: 'none', display: 'block', borderRadius: 16, overflow: 'hidden', background: 'rgba(21,25,32,.85)', border: '1px solid rgba(255,255,255,.07)', transition: 'transform .2s,box-shadow .2s', position: 'relative' }}>
       {/* Photo */}
-      <div style={{ position: 'relative', aspectRatio: '3/4', overflow: 'hidden' }}>
+      <div style={{ position: 'relative', aspectRatio: '2/3', overflow: 'hidden' }}>
         <img
           src={photo}
           alt={`${p.nom}, ${p.age} ans`}

@@ -158,3 +158,28 @@ a { color: inherit; }
   .cat-grid  { grid-template-columns: 1fr; }
   .tag-grid  { grid-template-columns: 1fr; }
 }
+css/* ─── Annonces page ──────────────────────────────────────────────────────── */
+.annonces-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.annonces-sidebar {
+  display: block !important;
+  position: sticky;
+  top: 120px;
+}
+.annonces-grid {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+@media (max-width: 768px) {
+  .annonces-layout  { grid-template-columns: 1fr; }
+  .annonces-sidebar { display: none !important; }
+  .annonces-grid    { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+}
+
+@media (max-width: 400px) {
+  .annonces-grid { grid-template-columns: 1fr !important; }
+}

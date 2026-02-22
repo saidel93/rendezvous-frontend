@@ -35,7 +35,7 @@ export default async function TagsPage() {
             <div key={cat._id} style={{ background: 'rgba(21,25,32,.8)', border: '1px solid rgba(255,255,255,.07)', borderRadius: 14, padding: 24 }}>
               <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.3rem', color: 'white', marginBottom: 16 }}>{cat.emoji} {cat.nom}</h2>
               <ul style={{ listStyle: 'none', marginBottom: 18 }}>
-                {list.map(p => (
+                {list.filter(p => p?.slug?.current).map(p => (
                   <li key={p._id} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
                     <span style={{ color: '#7c8590', fontSize: '.8rem' }}>☐</span>
                     <Link href={`/profil/${p.slug.current}`} style={{ color: '#fb7185', textDecoration: 'none', fontSize: '.85rem', fontWeight: 500 }}>{p.tagline}</Link>

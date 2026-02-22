@@ -1,0 +1,22 @@
+:root {
+  --rose: #e11d48;
+  --rose-light: #fb7185;
+  --night: #0c0f14;
+  --night-2: #151920;
+  --glass: rgba(255,255,255,0.035);
+  --text: #ede8e3;
+  --muted: #7c8590;
+  --gold: #c9913a;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Figtree', system-ui, sans-serif;
+  background: var(--night);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+h1,h2,h3,h4 { font-family: 'Playfair Display', Georgia, serif; }
+a { color: inherit; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: var(--rose); border-radius: 2px; }

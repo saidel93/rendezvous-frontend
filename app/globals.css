@@ -8,15 +8,153 @@
   --muted: #7c8590;
   --gold: #c9913a;
 }
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+
 body {
   font-family: 'Figtree', system-ui, sans-serif;
   background: var(--night);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;   /* prevents horizontal scroll on mobile */
+  width: 100%;
 }
-h1,h2,h3,h4 { font-family: 'Playfair Display', Georgia, serif; }
+
+h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; }
 a { color: inherit; }
+
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-thumb { background: var(--rose); border-radius: 2px; }
+
+/* ─── Navbar responsive ──────────────────────────────────────────────────── */
+.nav-search    { display: flex !important; }
+.nav-online    { display: flex !important; }
+.nav-bottom    { display: flex !important; }
+.nav-hamburger { display: none !important; }
+.mobile-menu   { display: none !important; }
+
+@media (max-width: 768px) {
+  .nav-search              { display: none !important; }
+  .nav-online              { display: none !important; }
+  .nav-bottom              { display: none !important; }
+  .nav-hamburger           { display: flex !important; }
+  .mobile-menu.is-open     { display: flex !important; }
+}
+
+.nav-link:hover        { color: white !important; }
+.dropdown-link:hover   { color: white !important; background: rgba(255,255,255,.04) !important; }
+.nav-btn:hover         { opacity: .85 !important; }
+
+.dropdown-panel { animation: fadeDown .15s ease; }
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Hero ───────────────────────────────────────────────────────────────── */
+.hero-title {
+  font-size: clamp(2rem, 5.5vw, 4.8rem);
+  line-height: 1.06;
+  color: white;
+  margin-bottom: 20px;
+}
+.hero-subtitle {
+  font-size: clamp(.9rem, 2.2vw, 1.05rem);
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 500px;
+  margin: 0 auto 36px;
+}
+.hero-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 50px;
+}
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  .hero-title   { font-size: 2rem; }
+  .hero-buttons { flex-direction: column; align-items: center; }
+  .hero-stats   { gap: 24px; }
+}
+
+/* ─── Page section header (used on all inner pages) ──────────────────────── */
+.page-header {
+  padding: 40px 0 28px;
+  background: linear-gradient(135deg, rgba(225,29,72,.07), transparent);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  margin-bottom: 36px;
+}
+.page-header h1 {
+  font-size: clamp(1.7rem, 4vw, 2.4rem);
+  color: white;
+  margin-top: 8px;
+  margin-bottom: 6px;
+}
+.page-header p {
+  color: var(--muted);
+  font-size: .9rem;
+  font-family: 'Figtree', sans-serif;
+}
+.page-breadcrumb {
+  color: #3e444d;
+  font-size: .78rem;
+  font-family: 'Figtree', sans-serif;
+}
+
+/* ─── Grids ──────────────────────────────────────────────────────────────── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+.city-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+}
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+.tag-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 18px;
+}
+
+/* sidebar layout (annonces, regions/[slug], categories/[slug]) */
+.layout-sidebar {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+/* profile page: photo + info */
+.layout-profile {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1.45fr);
+  gap: 40px;
+  align-items: start;
+  margin-bottom: 60px;
+}
+
+@media (max-width: 900px) {
+  .layout-sidebar  { grid-template-columns: 1fr; }
+  .layout-profile  { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .card-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .city-grid { grid-template-columns: repeat(2, 1fr); }
+  .cat-grid  { grid-template-columns: 1fr; }
+  .tag-grid  { grid-template-columns: 1fr; }
+}

@@ -38,19 +38,19 @@ export default async function HomePage() {
             <span style={{ width: 7, height: 7, background: '#22c55e', borderRadius: '50%', display: 'inline-block' }} />
             <strong style={{ color: '#86efac' }}>87</strong> membres en ligne dans votre région
           </div>
-          <h1 style={{ fontSize: 'clamp(2.6rem,6.5vw,5rem)', lineHeight: 1.05, color: 'white', marginBottom: 20 }}>
+          <h1 className="hero-title" style={{ marginBottom: 20 }}>
             Trouvez votre<br />
             <span style={{ background: 'linear-gradient(135deg,#fb7185,#e11d48,#c9913a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontStyle: 'italic' }}>Âme Sœur au Québec</span>
           </h1>
-          <p style={{ fontSize: '1.05rem', color: '#7c8590', lineHeight: 1.7, maxWidth: 500, margin: '0 auto 36px' }}>Des milliers de profils vérifiés à travers le Québec. De vraies personnes, de vraies connexions.</p>
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 50 }}>
-            <Link href="/annonces" style={{ background: 'linear-gradient(135deg,#e11d48,#9f1239)', boxShadow: '0 4px 20px rgba(225,29,72,.4)', color: '#fff', fontWeight: 600, padding: '15px 34px', borderRadius: 14, fontSize: '.95rem', textDecoration: 'none' }}>❤ Parcourir les profils</Link>
-            <Link href="/regions" style={{ background: 'rgba(255,255,255,.035)', border: '1px solid rgba(255,255,255,.07)', backdropFilter: 'blur(16px)', color: 'white', padding: '15px 34px', borderRadius: 14, fontSize: '.95rem', fontWeight: 600, textDecoration: 'none' }}>📍 Par région</Link>
+          <p className="hero-subtitle" style={{ maxWidth: 500, margin: '0 auto 36px' }}>Des milliers de profils vérifiés à travers le Québec. De vraies personnes, de vraies connexions.</p>
+          <div className="hero-buttons">
+            <Link href="/annonces" style={{ background: 'linear-gradient(135deg,#e11d48,#9f1239)', boxShadow: '0 4px 20px rgba(225,29,72,.4)', color: '#fff', fontWeight: 700, padding: '14px 32px', borderRadius: 14, fontSize: '.95rem', textDecoration: 'none' }}>❤ Parcourir les profils</Link>
+            <Link href="/regions" style={{ background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.1)', color: 'white', padding: '14px 32px', borderRadius: 14, fontSize: '.95rem', fontWeight: 600, textDecoration: 'none' }}>📍 Par région</Link>
           </div>
-          <div style={{ display: 'flex', gap: 40, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <div className="hero-stats">
             {[['122+', 'Membres actifs'], ['9', 'Villes'], ['6', 'Catégories']].map(([n, l]) => (
-              <div key={l}>
-                <span style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.9rem', fontWeight: 700, display: 'block', background: 'linear-gradient(135deg,#fb7185,#e11d48)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{n}</span>
+              <div key={l} style={{ textAlign: 'center' }}>
+                <span style={{ fontFamily: "'Playfair Display',serif", fontSize: '2rem', fontWeight: 700, display: 'block', background: 'linear-gradient(135deg,#fb7185,#e11d48)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{n}</span>
                 <span style={{ color: '#3e444d', fontSize: '.78rem' }}>{l}</span>
               </div>
             ))}

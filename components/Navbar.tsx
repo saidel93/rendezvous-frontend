@@ -10,7 +10,7 @@ export default function Navbar() {
   const [open, setOpen]             = useState('')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [q, setQ]                   = useState('')
-  const [onlineCount] = useState(() => Math.floor(Math.random() * 71) + 50))
+  const [onlineCount]               = useState(() => Math.floor(Math.random() * 71) + 50)
 
   useEffect(() => {
     client.fetch(ALL_CITIES_QUERY).then(setCities).catch(() => {})
@@ -78,7 +78,7 @@ export default function Navbar() {
             {/* Online badge – hidden on mobile */}
             <div className="nav-online" style={{ alignItems: 'center', gap: 6, background: 'rgba(34,197,94,.09)', border: '1px solid rgba(34,197,94,.28)', borderRadius: 50, padding: '6px 13px', fontSize: '.77rem', color: '#86efac', fontWeight: 600, whiteSpace: 'nowrap' }}>
               <span style={{ width: 7, height: 7, background: '#22c55e', borderRadius: '50%', display: 'inline-block', marginRight: 4 }} />
-             {onlineCount} en ligne
+              {onlineCount} en ligne
             </div>
 
             {/* CTA */}
@@ -132,8 +132,6 @@ export default function Navbar() {
               </div>
             )}
           </div>
-
-        
 
           <Link href="/tags" className="nav-link" style={{ display: 'flex', alignItems: 'center', padding: '0 16px', height: 44, color: '#9ba3af', fontSize: '.82rem', fontWeight: 500, textDecoration: 'none' }}>🏷️ Tags</Link>
           <Link href="/legal" className="nav-link" style={{ display: 'flex', alignItems: 'center', padding: '0 16px', height: 44, color: '#9ba3af', fontSize: '.82rem', fontWeight: 500, textDecoration: 'none' }}>⚖️ Légal</Link>

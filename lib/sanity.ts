@@ -3,7 +3,7 @@ import imageUrlBuilder from '@sanity/image-url'
 import type { SiteSettings } from './types'
 
 /* ────────────────────────────────────────────────────────────── */
-/*  SANITY CLIENT                                                 */
+/*  SANITY CLIENT                                                */
 /* ────────────────────────────────────────────────────────────── */
 
 export const client = createClient({
@@ -16,23 +16,15 @@ export const client = createClient({
 })
 
 const builder = imageUrlBuilder(client)
-export const urlFor = (source: any) =>
-  builder.image(source)
+export const urlFor = (source: any) => builder.image(source)
 
 /* ────────────────────────────────────────────────────────────── */
-/*  IMAGE HELPERS                                                 */
+/*  IMAGE HELPERS                                                */
 /* ────────────────────────────────────────────────────────────── */
 
-export function getPhotoSrc(
-  profile: any,
-  w = 400,
-  h = 500
-): string {
+export function getPhotoSrc(profile: any, w = 400, h = 500): string {
   if (profile?.photo?.asset?._ref)
-    return urlFor(profile.photo)
-      .width(w)
-      .height(h)
-      .url()
+    return urlFor(profile.photo).width(w).height(h).url()
 
   if (profile?.photoUrl) return profile.photoUrl
 
@@ -43,9 +35,7 @@ export function getPhotoSrc(
   return `https://randomuser.me/api/portraits/women/${seed}.jpg`
 }
 
-export function getGalleryUrls(
-  profile: any
-): string[] {
+export function getGalleryUrls(profile: any): string[] {
   if (profile?.photos?.length > 0)
     return profile.photos
       .filter((p: any) => p?.asset?._ref)
@@ -62,7 +52,7 @@ export function getGalleryUrls(
 }
 
 /* ────────────────────────────────────────────────────────────── */
-/*  AFFILIATE                                                     */
+/*  AFFILIATE                                                    */
 /* ────────────────────────────────────────────────────────────── */
 
 export function getAffiliateUrl(
@@ -77,43 +67,33 @@ export function getAffiliateUrl(
 }
 
 /* ────────────────────────────────────────────────────────────── */
-/*  SEO HELPERS                                                   */
+/*  SEO HELPERS                                                  */
 /* ────────────────────────────────────────────────────────────── */
 
-export function getProfileMetaTitle(
-  profile: any
-): string {
+export function getProfileMetaTitle(profile: any): string {
   if (profile?.seoTitle?.trim())
     return profile.seoTitle.trim()
 
-  return `${profile.nom}, ${
-    profile.age
-  } ans à ${
+  return `${profile.nom}, ${profile.age} ans à ${
     profile.ville?.nom || 'Québec'
   } – RendezVous Québec`
 }
 
-export function getProfileMetaDesc(
-  profile: any
-): string {
+export function getProfileMetaDesc(profile: any): string {
   if (profile?.seoDescription?.trim())
     return profile.seoDescription.trim()
 
   if (profile?.bio?.trim()) {
-    const words = profile.bio
-      .trim()
-      .split(/\s+/)
-    return (
-      words.slice(0, 20).join(' ') +
+    const words = profile.bio.trim().split(/\s+/)
+    return words.slice(0, 20).join(' ') +
       (words.length > 20 ? '…' : '')
-    )
   }
 
   return profile?.tagline || ''
 }
 
 /* ────────────────────────────────────────────────────────────── */
-/*  COMMON FIELDS                                                 */
+/*  COMMON PROFILE FIELDS                                        */
 /* ────────────────────────────────────────────────────────────── */
 
 const PROFILE_FIELDS = `
@@ -139,7 +119,7 @@ const PROFILE_FIELDS = `
 `
 
 /* ────────────────────────────────────────────────────────────── */
-/*  QUERIES                                                       */
+/*  PROFILE QUERIES                                              */
 /* ────────────────────────────────────────────────────────────── */
 
 export const ALL_PROFILES_QUERY = `
@@ -169,14 +149,17 @@ export const PROFILES_BY_CITY_QUERY = `
   { ${PROFILE_FIELDS} }
 `
 
+/* SAFE CATEGORY VERSION (ONLY ONE VERSION) */
+
 export const PROFILES_BY_CAT_QUERY = `
-  *[_type == "profile" && categorie->slug.current == $catSlug]
-  | order(_createdAt desc)
-  { ${PROFILE_FIELDS} }
+  *[_type == "profile" && references(*[_type=="categorie" && slug.current==$catSlug][0]._id)]
+  | order(_createdAt desc){
+    ${PROFILE_FIELDS}
+  }
 `
 
 /* ────────────────────────────────────────────────────────────── */
-/*  CITIES (FIXED PROFILE COUNT)                                  */
+/*  CITIES                                                       */
 /* ────────────────────────────────────────────────────────────── */
 
 export const ALL_CITIES_QUERY = `
@@ -204,7 +187,7 @@ export const CITY_BY_SLUG_QUERY = `
 `
 
 /* ────────────────────────────────────────────────────────────── */
-/*  CATEGORIES — FULL SAFE VERSION                               */
+/*  CATEGORIES                                                   */
 /* ────────────────────────────────────────────────────────────── */
 
 export const ALL_CATEGORIES_QUERY = `
@@ -221,14 +204,8 @@ export const ALL_CATEGORIES_QUERY = `
   }
 `
 
-export const PROFILES_BY_CAT_QUERY = `
-  *[_type == "profile" && references(*[_type=="categorie" && slug.current==$catSlug][0]._id)]
-  | order(_createdAt desc){
-    ${PROFILE_FIELDS}
-  }
-`
 /* ────────────────────────────────────────────────────────────── */
-/*  SETTINGS                                                      */
+/*  SETTINGS                                                     */
 /* ────────────────────────────────────────────────────────────── */
 
 export const SETTINGS_QUERY = `
@@ -238,8 +215,9 @@ export const SETTINGS_QUERY = `
     siteDescription
   }
 `
+
 /* ────────────────────────────────────────────────────────────── */
-/*  BLOG QUERIES                                                  */
+/*  BLOG QUERIES                                                 */
 /* ────────────────────────────────────────────────────────────── */
 
 const BLOG_FIELDS = `

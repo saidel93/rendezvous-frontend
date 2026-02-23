@@ -204,7 +204,7 @@ export const CITY_BY_SLUG_QUERY = `
 `
 
 /* ────────────────────────────────────────────────────────────── */
-/*  CATEGORIES (FIXED PROFILE COUNT WITH REFERENCES)             */
+/*  CATEGORIES — FULL SAFE VERSION                               */
 /* ────────────────────────────────────────────────────────────── */
 
 export const ALL_CATEGORIES_QUERY = `
@@ -221,15 +221,10 @@ export const ALL_CATEGORIES_QUERY = `
   }
 `
 
-export const CAT_BY_SLUG_QUERY = `
-  *[_type == "categorie" && slug.current == $slug][0]{
-    _id,
-    nom,
-    slug,
-    emoji,
-    description,
-    seoTitle,
-    seoDescription
+export const PROFILES_BY_CAT_QUERY = `
+  *[_type == "profile" && references(*[_type=="categorie" && slug.current==$catSlug][0]._id)]
+  | order(_createdAt desc){
+    ${PROFILE_FIELDS}
   }
 `
 /* ────────────────────────────────────────────────────────────── */
@@ -241,5 +236,35 @@ export const SETTINGS_QUERY = `
     affiliateUrl,
     siteName,
     siteDescription
+  }
+`
+/* ────────────────────────────────────────────────────────────── */
+/*  BLOG QUERIES                                                  */
+/* ────────────────────────────────────────────────────────────── */
+
+const BLOG_FIELDS = `
+  _id,
+  titre,
+  slug,
+  extrait,
+  contenu,
+  imageUrl,
+  image{ asset->{_ref,_id,url} },
+  datePublication,
+  publie,
+  seoTitle,
+  seoDescription
+`
+
+export const ALL_BLOGS_QUERY = `
+  *[_type == "blog" && (!defined(publie) || publie == true)]
+  | order(coalesce(datePublication, _createdAt) desc){
+    ${BLOG_FIELDS}
+  }
+`
+
+export const BLOG_BY_SLUG_QUERY = `
+  *[_type == "blog" && slug.current == $slug && (!defined(publie) || publie == true)][0]{
+    ${BLOG_FIELDS}
   }
 `

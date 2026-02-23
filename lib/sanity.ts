@@ -219,6 +219,8 @@ export const SETTINGS_QUERY = `
   *[_type == "settings" && _id == "site-settings"][0]{
     affiliateUrl,
     siteName,
-    siteDescription
+    siteDescription,
+    homeSeoTitle,
+    homeSeoDescription
   }
 `

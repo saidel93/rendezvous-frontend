@@ -6,16 +6,38 @@ import {
   ALL_CITIES_QUERY,
   ALL_CATEGORIES_QUERY,
   ALL_PROFILES_QUERY,
+  SETTINGS_QUERY,
 } from '@/lib/sanity'
 import ProfileCard from '@/components/ProfileCard'
-import type { Profile, Ville, Categorie } from '@/lib/types'
+import type { Profile, Ville, Categorie, SiteSettings } from '@/lib/types'
 
-export const dynamic = 'force-dynamic' // 🔥 disable cache
+export const dynamic = 'force-dynamic'
 
-export const metadata: Metadata = {
-  title: 'RendezVous Québec – Rencontres authentiques au Québec',
-  description:
-    'Des milliers de profils vérifiés à travers le Québec.',
+/* ───────────────────────────────────────────── */
+/* 🔥 Dynamic SEO from Sanity                   */
+/* ───────────────────────────────────────────── */
+
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const settings: SiteSettings | null =
+      await client.fetch(SETTINGS_QUERY)
+
+    return {
+      title:
+        settings?.homeSeoTitle ||
+        'RendezVous Québec – Rencontres authentiques',
+
+      description:
+        settings?.homeSeoDescription ||
+        settings?.siteDescription ||
+        'Rencontres au Québec.',
+    }
+  } catch {
+    return {
+      title: 'RendezVous Québec',
+      description: 'Rencontres au Québec.',
+    }
+  }
 }
 
 /* 🔥 Random shuffle function */
@@ -37,9 +59,8 @@ export default async function HomePage() {
 
     // If no featured → fallback to all profiles
     if (!featured || featured.length === 0) {
-      const allProfiles: Profile[] = await client.fetch(
-        ALL_PROFILES_QUERY
-      )
+      const allProfiles: Profile[] =
+        await client.fetch(ALL_PROFILES_QUERY)
       featured = allProfiles
     }
 
@@ -97,7 +118,7 @@ export default async function HomePage() {
                 fontStyle: 'italic',
               }}
             >
-              Âme Sœur au Québec
+              Âme Sœur ou votre Plan Cul au Québec
             </span>
           </h1>
 

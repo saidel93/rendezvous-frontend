@@ -204,6 +204,18 @@ export const ALL_CATEGORIES_QUERY = `
   }
 `
 
+export const CAT_BY_SLUG_QUERY = `
+  *[_type == "categorie" && slug.current == $slug][0]{
+    _id,
+    nom,
+    slug,
+    emoji,
+    description,
+    seoTitle,
+    seoDescription
+  }
+`
+
 /* ────────────────────────────────────────────────────────────── */
 /*  SETTINGS                                                     */
 /* ────────────────────────────────────────────────────────────── */

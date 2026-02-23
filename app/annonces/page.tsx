@@ -86,26 +86,25 @@ export default async function AnnoncesPage({
             Toutes les annonces
           </h1>
           <p style={{ color: '#7c8590' }}>
-            {profiles.length} profil
-            {profiles.length > 1 ? 's' : ''} trouvé
+            {profiles.length} profil{profiles.length > 1 ? 's' : ''} trouvé
             {profiles.length > 1 ? 's' : ''}
           </p>
         </div>
       </div>
 
-      {/* MAIN GRID LAYOUT */}
+      {/* RESPONSIVE LAYOUT */}
       <div
+        className="annonces-layout"
         style={{
           maxWidth: 1500,
           margin: '0 auto',
           padding: '0 20px 60px',
           display: 'grid',
-          gridTemplateColumns: '260px 1fr 260px',
           gap: 28,
         }}
       >
-        {/* LEFT SIDEBAR - VILLES */}
-        <aside style={{ position: 'sticky', top: 120 }}>
+        {/* LEFT SIDEBAR */}
+        <aside className="sidebar-left">
           <div
             style={{
               background: 'rgba(21,25,32,.8)',
@@ -138,13 +137,14 @@ export default async function AnnoncesPage({
           </div>
         </aside>
 
-        {/* CENTER PROFILES */}
-        <div>
+        {/* PROFILES */}
+        <main>
           {profiles.length > 0 ? (
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(6, 1fr)',
+                gridTemplateColumns:
+                  'repeat(auto-fill,minmax(220px,1fr))',
                 gap: 16,
               }}
             >
@@ -157,10 +157,10 @@ export default async function AnnoncesPage({
               Aucun profil trouvé.
             </div>
           )}
-        </div>
+        </main>
 
-        {/* RIGHT SIDEBAR - CATEGORIES */}
-        <aside style={{ position: 'sticky', top: 120 }}>
+        {/* RIGHT SIDEBAR */}
+        <aside className="sidebar-right">
           <div
             style={{
               background: 'rgba(21,25,32,.8)',
@@ -193,6 +193,24 @@ export default async function AnnoncesPage({
           </div>
         </aside>
       </div>
+
+      {/* RESPONSIVE CSS */}
+      <style jsx>{`
+        .annonces-layout {
+          grid-template-columns: 260px 1fr 260px;
+        }
+
+        @media (max-width: 1200px) {
+          .annonces-layout {
+            grid-template-columns: 1fr;
+          }
+
+          .sidebar-left,
+          .sidebar-right {
+            display: none;
+          }
+        }
+      `}</style>
     </div>
   )
 }

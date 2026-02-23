@@ -9,7 +9,7 @@ import {
   SETTINGS_QUERY,
 } from '@/lib/sanity'
 import ProfileCard from '@/components/ProfileCard'
-import type { Profile, Ville, Categorie, SiteSettings } from '@/lib/types'
+import type { Profile } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,17 +19,16 @@ export const dynamic = 'force-dynamic'
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
-    const settings: SiteSettings | null =
-      await client.fetch(SETTINGS_QUERY)
+    const settings = await client.fetch(SETTINGS_QUERY)
 
     return {
       title:
-        settings?.homeSeoTitle ||
+        settings?.homeSeoTitle ??
         'RendezVous Québec – Rencontres authentiques',
 
       description:
-        settings?.homeSeoDescription ||
-        settings?.siteDescription ||
+        settings?.homeSeoDescription ??
+        settings?.siteDescription ??
         'Rencontres au Québec.',
     }
   } catch {
@@ -47,24 +46,23 @@ function shuffle<T>(array: T[]): T[] {
 
 export default async function HomePage() {
   let featured: Profile[] = []
-  let cities: Ville[] = []
-  let cats: Categorie[] = []
 
   try {
-    ;[featured, cities, cats] = await Promise.all([
+    const [featuredProfiles] = await Promise.all([
       client.fetch(FEATURED_QUERY),
       client.fetch(ALL_CITIES_QUERY),
       client.fetch(ALL_CATEGORIES_QUERY),
     ])
 
-    // If no featured → fallback to all profiles
-    if (!featured || featured.length === 0) {
+    featured = featuredProfiles || []
+
+    if (featured.length === 0) {
       const allProfiles: Profile[] =
         await client.fetch(ALL_PROFILES_QUERY)
-      featured = allProfiles
+
+      featured = allProfiles || []
     }
 
-    // 🔥 RANDOMIZE every time
     featured = shuffle(featured).slice(0, 8)
   } catch (e) {
     console.error(e)

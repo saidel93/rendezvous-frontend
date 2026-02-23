@@ -57,7 +57,7 @@ export default async function ProfilePage({ params }: { params: { slug: string }
 
   if (!p) notFound()
 
-  const mainPhoto = getPhotoSrc(p, 500, 600)
+  const mainPhoto = getPhotoSrc(p, 800, 1000)
   const gallery = getGalleryUrls(p)
   const affLink = getAffiliateUrl(p, settings)
 
@@ -65,30 +65,43 @@ export default async function ProfilePage({ params }: { params: { slug: string }
     .filter((x: Profile) => x._id !== p!._id && x.ville?._id === p!.ville?._id)
     .slice(0, 4)
 
+  const responsiveStyle = `
+    @media (min-width: 900px) {
+      .profile-grid {
+        grid-template-columns: minmax(0,1fr) minmax(0,1.3fr);
+        gap: 50px;
+      }
+    }
+  `
+
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
+      <style>{responsiveStyle}</style>
+
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '40px 20px' }}>
 
         {/* ───────── MAIN GRID ───────── */}
         <div
+          className="profile-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'minmax(0,1fr) minmax(0,1.3fr)',
-            gap: 50,
+            gridTemplateColumns: '1fr',
+            gap: 30,
             alignItems: 'start',
-            marginBottom: 70,
+            marginBottom: 60,
           }}
         >
 
           {/* ───────── IMAGE COLUMN ───────── */}
-          <div style={{ maxWidth: 420 }}>
+          <div style={{ width: '100%' }}>
             <div
               style={{
                 borderRadius: 18,
                 overflow: 'hidden',
-                aspectRatio: '4/5', // smaller than before
+                aspectRatio: '4/5',
                 position: 'relative',
-                marginBottom: 14,
+                marginBottom: 16,
+                width: '100%',
               }}
             >
               <img
@@ -116,10 +129,9 @@ export default async function ProfilePage({ params }: { params: { slug: string }
           {/* ───────── INFO COLUMN ───────── */}
           <div>
 
-            {/* TITLE */}
             <h1
               style={{
-                fontSize: '2.6rem', // bigger
+                fontSize: 'clamp(1.7rem, 6vw, 2.6rem)',
                 color: 'white',
                 lineHeight: 1.2,
                 fontFamily: "'Playfair Display', serif",
@@ -131,7 +143,7 @@ export default async function ProfilePage({ params }: { params: { slug: string }
 
             <div
               style={{
-                fontSize: '1.3rem',
+                fontSize: '1.1rem',
                 fontWeight: 600,
                 color: '#f1f5f9',
                 marginBottom: 20,
@@ -140,7 +152,6 @@ export default async function ProfilePage({ params }: { params: { slug: string }
               {p.age} ans {p.ville && <>· 📍 {p.ville.nom}</>}
             </div>
 
-            {/* TAGLINE */}
             <blockquote
               style={{
                 borderLeft: '4px solid #e11d48',
@@ -150,7 +161,7 @@ export default async function ProfilePage({ params }: { params: { slug: string }
             >
               <p
                 style={{
-                  fontSize: '1.25rem', // bigger
+                  fontSize: 'clamp(1rem, 4vw, 1.25rem)',
                   color: 'rgba(255,255,255,.85)',
                   lineHeight: 1.6,
                   fontStyle: 'italic',
@@ -160,12 +171,11 @@ export default async function ProfilePage({ params }: { params: { slug: string }
               </p>
             </blockquote>
 
-            {/* BIO */}
             {p.bio && (
               <p
                 style={{
-                  fontSize: '1.05rem', // much more readable
-                  lineHeight: 1.9,
+                  fontSize: '1rem',
+                  lineHeight: 1.8,
                   color: '#cbd5e1',
                   marginBottom: 30,
                   whiteSpace: 'pre-wrap',
@@ -175,7 +185,6 @@ export default async function ProfilePage({ params }: { params: { slug: string }
               </p>
             )}
 
-            {/* CTA */}
             <div
               style={{
                 background: 'rgba(255,255,255,.04)',
@@ -216,7 +225,7 @@ export default async function ProfilePage({ params }: { params: { slug: string }
               style={{
                 fontFamily: "'Playfair Display', serif",
                 color: 'white',
-                fontSize: '1.6rem',
+                fontSize: '1.5rem',
                 marginBottom: 20,
               }}
             >
@@ -226,8 +235,8 @@ export default async function ProfilePage({ params }: { params: { slug: string }
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill,minmax(220px,1fr))',
-                gap: 18,
+                gridTemplateColumns: 'repeat(auto-fill,minmax(160px,1fr))',
+                gap: 16,
               }}
             >
               {sameCity.map((r: Profile) => (

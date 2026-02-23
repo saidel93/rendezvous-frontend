@@ -10,13 +10,17 @@ import {
 import ProfileCard from '@/components/ProfileCard'
 import type { Profile, Ville, Categorie } from '@/lib/types'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic' // 🔥 disable cache
 
 export const metadata: Metadata = {
-  title:
-    'RendezVous Québec – Rencontres authentiques au Québec',
+  title: 'RendezVous Québec – Rencontres authentiques au Québec',
   description:
     'Des milliers de profils vérifiés à travers le Québec.',
+}
+
+/* 🔥 Random shuffle function */
+function shuffle<T>(array: T[]): T[] {
+  return [...array].sort(() => Math.random() - 0.5)
 }
 
 export default async function HomePage() {
@@ -31,10 +35,16 @@ export default async function HomePage() {
       client.fetch(ALL_CATEGORIES_QUERY),
     ])
 
-    // 🔥 If no featured profiles → fallback to latest profiles
+    // If no featured → fallback to all profiles
     if (!featured || featured.length === 0) {
-      featured = await client.fetch(ALL_PROFILES_QUERY + '[0...8]')
+      const allProfiles: Profile[] = await client.fetch(
+        ALL_PROFILES_QUERY
+      )
+      featured = allProfiles
     }
+
+    // 🔥 RANDOMIZE every time
+    featured = shuffle(featured).slice(0, 8)
   } catch (e) {
     console.error(e)
   }
@@ -142,7 +152,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* FEATURED */}
+      {/* RANDOM PROFILES */}
       <section
         style={{
           padding: '10px 0 50px',
@@ -165,7 +175,7 @@ export default async function HomePage() {
               fontWeight: 700,
             }}
           >
-            ⭐ Profils récents
+            ⭐ Profils au hasard
           </h2>
 
           {featured.length > 0 ? (

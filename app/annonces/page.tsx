@@ -9,7 +9,12 @@ import ProfileCard from '@/components/ProfileCard'
 import Link from 'next/link'
 import type { Profile, Ville, Categorie } from '@/lib/types'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic' // 🔥 disable caching
+
+/* 🔥 Shuffle function */
+function shuffle<T>(array: T[]): T[] {
+  return [...array].sort(() => Math.random() - 0.5)
+}
 
 export async function generateMetadata({
   searchParams,
@@ -25,10 +30,7 @@ export async function generateMetadata({
     desc = `Résultats pour "${searchParams.q}" parmi les célibataires du Québec.`
   }
 
-  return {
-    title,
-    description: desc,
-  }
+  return { title, description: desc }
 }
 
 export default async function AnnoncesPage({
@@ -46,29 +48,37 @@ export default async function AnnoncesPage({
       client.fetch(ALL_CITIES_QUERY),
       client.fetch(ALL_CATEGORIES_QUERY),
     ])
-  } catch (e) {}
+  } catch (e) {
+    console.error(e)
+  }
 
-  let profiles = allProfiles
+  let profiles = allProfiles || []
 
-  if (searchParams.city)
+  // Filters
+  if (searchParams.city) {
     profiles = profiles.filter(
-      (p) => p.ville?.slug.current === searchParams.city
+      (p) => p.ville?.slug?.current === searchParams.city
     )
+  }
 
-  if (searchParams.cat)
+  if (searchParams.cat) {
     profiles = profiles.filter(
-      (p) => p.categorie?.slug.current === searchParams.cat
+      (p) => p.categorie?.slug?.current === searchParams.cat
     )
+  }
 
   if (searchParams.q) {
     const q = searchParams.q.toLowerCase()
     profiles = profiles.filter(
       (p) =>
-        p.nom.toLowerCase().includes(q) ||
+        p.nom?.toLowerCase().includes(q) ||
         p.tagline?.toLowerCase().includes(q) ||
-        p.ville?.nom.toLowerCase().includes(q)
+        p.ville?.nom?.toLowerCase().includes(q)
     )
   }
+
+  // 🔥 RANDOMIZE EVERY VISIT
+  profiles = shuffle(profiles)
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
@@ -90,7 +100,6 @@ export default async function AnnoncesPage({
         </div>
       </div>
 
-      {/* MAIN CONTENT */}
       <div
         style={{
           maxWidth: 1400,
@@ -98,53 +107,13 @@ export default async function AnnoncesPage({
           padding: '0 20px 60px',
         }}
       >
-        {/* Desktop Layout */}
         <div
           style={{
             display: 'flex',
             gap: 28,
+            flexDirection: 'column',
           }}
         >
-          {/* LEFT SIDEBAR (Hidden on mobile via CSS trick) */}
-          <div
-            style={{
-              width: 250,
-              display: 'none',
-            }}
-            className="desktop-only"
-          >
-            <div
-              style={{
-                background: 'rgba(21,25,32,.8)',
-                borderRadius: 14,
-                padding: 16,
-              }}
-            >
-              <h3 style={{ color: '#fb7185', fontSize: '.8rem' }}>
-                🏙️ Villes
-              </h3>
-
-              {cities.map((c) => (
-                <Link
-                  key={c._id}
-                  href={`/annonces?city=${c.slug.current}`}
-                  style={{
-                    display: 'block',
-                    padding: '6px 0',
-                    fontSize: '.85rem',
-                    color:
-                      searchParams.city === c.slug.current
-                        ? '#fb7185'
-                        : '#9ba3af',
-                    textDecoration: 'none',
-                  }}
-                >
-                  📍 {c.nom}
-                </Link>
-              ))}
-            </div>
-          </div>
-
           {/* PROFILES */}
           <div style={{ flex: 1 }}>
             {profiles.length > 0 ? (
@@ -167,54 +136,92 @@ export default async function AnnoncesPage({
             )}
           </div>
 
-          {/* RIGHT SIDEBAR */}
-          <div
-            style={{
-              width: 250,
-              display: 'none',
-            }}
-            className="desktop-only"
-          >
+          {/* DESKTOP SIDEBARS */}
+          <div className="desktop-sidebars">
             <div
               style={{
-                background: 'rgba(21,25,32,.8)',
-                borderRadius: 14,
-                padding: 16,
+                display: 'flex',
+                gap: 28,
               }}
             >
-              <h3 style={{ color: '#fb7185', fontSize: '.8rem' }}>
-                💝 Catégories
-              </h3>
-
-              {cats.map((c) => (
-                <Link
-                  key={c._id}
-                  href={`/annonces?cat=${c.slug.current}`}
+              {/* LEFT */}
+              <div style={{ width: 250 }}>
+                <div
                   style={{
-                    display: 'block',
-                    padding: '6px 0',
-                    fontSize: '.85rem',
-                    color:
-                      searchParams.cat === c.slug.current
-                        ? '#fb7185'
-                        : '#9ba3af',
-                    textDecoration: 'none',
+                    background: 'rgba(21,25,32,.8)',
+                    borderRadius: 14,
+                    padding: 16,
                   }}
                 >
-                  {c.emoji} {c.nom}
-                </Link>
-              ))}
+                  <h3 style={{ color: '#fb7185', fontSize: '.8rem' }}>
+                    🏙️ Villes
+                  </h3>
+
+                  {cities.map((c) => (
+                    <Link
+                      key={c._id}
+                      href={`/annonces?city=${c.slug.current}`}
+                      style={{
+                        display: 'block',
+                        padding: '6px 0',
+                        fontSize: '.85rem',
+                        color:
+                          searchParams.city === c.slug.current
+                            ? '#fb7185'
+                            : '#9ba3af',
+                        textDecoration: 'none',
+                      }}
+                    >
+                      📍 {c.nom}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* RIGHT */}
+              <div style={{ width: 250 }}>
+                <div
+                  style={{
+                    background: 'rgba(21,25,32,.8)',
+                    borderRadius: 14,
+                    padding: 16,
+                  }}
+                >
+                  <h3 style={{ color: '#fb7185', fontSize: '.8rem' }}>
+                    💝 Catégories
+                  </h3>
+
+                  {cats.map((c) => (
+                    <Link
+                      key={c._id}
+                      href={`/annonces?cat=${c.slug.current}`}
+                      style={{
+                        display: 'block',
+                        padding: '6px 0',
+                        fontSize: '.85rem',
+                        color:
+                          searchParams.cat === c.slug.current
+                            ? '#fb7185'
+                            : '#9ba3af',
+                        textDecoration: 'none',
+                      }}
+                    >
+                      {c.emoji} {c.nom}
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* GLOBAL STYLE (NO styled-jsx) */}
+      {/* RESPONSIVE STYLE */}
       <style>
         {`
-          @media (min-width: 1200px) {
-            .desktop-only {
-              display: block !important;
+          @media (max-width: 1200px) {
+            .desktop-sidebars {
+              display: none;
             }
           }
         `}

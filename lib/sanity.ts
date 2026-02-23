@@ -19,36 +19,33 @@ const builder = imageUrlBuilder(client)
 export const urlFor = (source: any) => builder.image(source)
 
 /* ────────────────────────────────────────────────────────────── */
-/*  IMAGE HELPERS                                                */
+/*  IMAGE HELPERS (UPLOAD ONLY)                                  */
 /* ────────────────────────────────────────────────────────────── */
 
 export function getPhotoSrc(profile: any, w = 400, h = 500): string {
-  if (profile?.photo?.asset?._ref)
-    return urlFor(profile.photo).width(w).height(h).url()
+  if (!profile?.photo?.asset?._ref) {
+    return '/placeholder.jpg'
+  }
 
-  if (profile?.photoUrl) return profile.photoUrl
-
-  const seed = profile?.nom
-    ? (profile.nom.charCodeAt(0) % 70) + 1
-    : 44
-
-  return `https://randomuser.me/api/portraits/women/${seed}.jpg`
+  return urlFor(profile.photo)
+    .width(w)
+    .height(h)
+    .fit('crop')
+    .url()
 }
 
 export function getGalleryUrls(profile: any): string[] {
-  if (profile?.photos?.length > 0)
-    return profile.photos
-      .filter((p: any) => p?.asset?._ref)
-      .map((p: any) =>
-        urlFor(p).width(600).height(600).url()
-      )
+  if (!profile?.photos?.length) return []
 
-  if (profile?.photosUrls?.length > 0)
-    return profile.photosUrls
-      .map((p: any) => p.url)
-      .filter(Boolean)
-
-  return [getPhotoSrc(profile)]
+  return profile.photos
+    .filter((p: any) => p?.asset?._ref)
+    .map((p: any) =>
+      urlFor(p)
+        .width(600)
+        .height(600)
+        .fit('crop')
+        .url()
+    )
 }
 
 /* ────────────────────────────────────────────────────────────── */
@@ -85,8 +82,10 @@ export function getProfileMetaDesc(profile: any): string {
 
   if (profile?.bio?.trim()) {
     const words = profile.bio.trim().split(/\s+/)
-    return words.slice(0, 20).join(' ') +
+    return (
+      words.slice(0, 20).join(' ') +
       (words.length > 20 ? '…' : '')
+    )
   }
 
   return profile?.tagline || ''
@@ -107,8 +106,8 @@ const PROFILE_FIELDS = `
   heroTitle,
   seoTitle,
   seoDescription,
-  photoUrl,
   photo{ asset->{_ref, _id, url} },
+  photos[]{ asset->{_ref, _id, url} },
   verifie,
   online,
   vedette,
@@ -137,9 +136,7 @@ export const FEATURED_QUERY = `
 export const PROFILE_BY_SLUG_QUERY = `
   *[_type == "profile" && slug.current == $slug][0]{
     ${PROFILE_FIELDS},
-    bio,
-    photosUrls,
-    photos[]{ asset->{_ref,_id,url} }
+    bio
   }
 `
 
@@ -148,8 +145,6 @@ export const PROFILES_BY_CITY_QUERY = `
   | order(_createdAt desc)
   { ${PROFILE_FIELDS} }
 `
-
-/* SAFE CATEGORY VERSION (ONLY ONE VERSION) */
 
 export const PROFILES_BY_CAT_QUERY = `
   *[_type == "profile" && references(*[_type=="categorie" && slug.current==$catSlug][0]._id)]
@@ -225,36 +220,5 @@ export const SETTINGS_QUERY = `
     affiliateUrl,
     siteName,
     siteDescription
-  }
-`
-
-/* ────────────────────────────────────────────────────────────── */
-/*  BLOG QUERIES                                                 */
-/* ────────────────────────────────────────────────────────────── */
-
-const BLOG_FIELDS = `
-  _id,
-  titre,
-  slug,
-  extrait,
-  contenu,
-  imageUrl,
-  image{ asset->{_ref,_id,url} },
-  datePublication,
-  publie,
-  seoTitle,
-  seoDescription
-`
-
-export const ALL_BLOGS_QUERY = `
-  *[_type == "blog" && (!defined(publie) || publie == true)]
-  | order(coalesce(datePublication, _createdAt) desc){
-    ${BLOG_FIELDS}
-  }
-`
-
-export const BLOG_BY_SLUG_QUERY = `
-  *[_type == "blog" && slug.current == $slug && (!defined(publie) || publie == true)][0]{
-    ${BLOG_FIELDS}
   }
 `

@@ -18,7 +18,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   let title = 'Toutes les annonces – Célibataires au Québec'
   let desc =
-    'Parcourez des milliers de profils vérifiés de célibataires à travers tout le Québec.'
+    'Parcourez des milliers de profils vérifiés à travers tout le Québec.'
 
   if (searchParams.q) {
     title = `Recherche "${searchParams.q}" – Annonces Québec`
@@ -28,7 +28,6 @@ export async function generateMetadata({
   return {
     title,
     description: desc,
-    openGraph: { title, description: desc },
   }
 }
 
@@ -87,130 +86,139 @@ export default async function AnnoncesPage({
           </h1>
           <p style={{ color: '#7c8590' }}>
             {profiles.length} profil{profiles.length > 1 ? 's' : ''} trouvé
-            {profiles.length > 1 ? 's' : ''}
           </p>
         </div>
       </div>
 
-      {/* RESPONSIVE LAYOUT */}
+      {/* MAIN CONTENT */}
       <div
-        className="annonces-layout"
         style={{
-          maxWidth: 1500,
+          maxWidth: 1400,
           margin: '0 auto',
           padding: '0 20px 60px',
-          display: 'grid',
-          gap: 28,
         }}
       >
-        {/* LEFT SIDEBAR */}
-        <aside className="sidebar-left">
+        {/* Desktop Layout */}
+        <div
+          style={{
+            display: 'flex',
+            gap: 28,
+          }}
+        >
+          {/* LEFT SIDEBAR (Hidden on mobile via CSS trick) */}
           <div
             style={{
-              background: 'rgba(21,25,32,.8)',
-              borderRadius: 14,
-              padding: 16,
+              width: 250,
+              display: 'none',
             }}
+            className="desktop-only"
           >
-            <h3 style={{ color: '#fb7185', fontSize: '.8rem' }}>
-              🏙️ Villes
-            </h3>
-
-            {cities.map((c) => (
-              <Link
-                key={c._id}
-                href={`/annonces?city=${c.slug.current}`}
-                style={{
-                  display: 'block',
-                  padding: '6px 0',
-                  fontSize: '.85rem',
-                  color:
-                    searchParams.city === c.slug.current
-                      ? '#fb7185'
-                      : '#9ba3af',
-                  textDecoration: 'none',
-                }}
-              >
-                📍 {c.nom}
-              </Link>
-            ))}
-          </div>
-        </aside>
-
-        {/* PROFILES */}
-        <main>
-          {profiles.length > 0 ? (
             <div
               style={{
-                display: 'grid',
-                gridTemplateColumns:
-                  'repeat(auto-fill,minmax(220px,1fr))',
-                gap: 16,
+                background: 'rgba(21,25,32,.8)',
+                borderRadius: 14,
+                padding: 16,
               }}
             >
-              {profiles.map((p) => (
-                <ProfileCard key={p._id} p={p} />
+              <h3 style={{ color: '#fb7185', fontSize: '.8rem' }}>
+                🏙️ Villes
+              </h3>
+
+              {cities.map((c) => (
+                <Link
+                  key={c._id}
+                  href={`/annonces?city=${c.slug.current}`}
+                  style={{
+                    display: 'block',
+                    padding: '6px 0',
+                    fontSize: '.85rem',
+                    color:
+                      searchParams.city === c.slug.current
+                        ? '#fb7185'
+                        : '#9ba3af',
+                    textDecoration: 'none',
+                  }}
+                >
+                  📍 {c.nom}
+                </Link>
               ))}
             </div>
-          ) : (
-            <div style={{ textAlign: 'center', padding: '80px 0' }}>
-              Aucun profil trouvé.
-            </div>
-          )}
-        </main>
+          </div>
 
-        {/* RIGHT SIDEBAR */}
-        <aside className="sidebar-right">
-          <div
-            style={{
-              background: 'rgba(21,25,32,.8)',
-              borderRadius: 14,
-              padding: 16,
-            }}
-          >
-            <h3 style={{ color: '#fb7185', fontSize: '.8rem' }}>
-              💝 Catégories
-            </h3>
-
-            {cats.map((c) => (
-              <Link
-                key={c._id}
-                href={`/annonces?cat=${c.slug.current}`}
+          {/* PROFILES */}
+          <div style={{ flex: 1 }}>
+            {profiles.length > 0 ? (
+              <div
                 style={{
-                  display: 'block',
-                  padding: '6px 0',
-                  fontSize: '.85rem',
-                  color:
-                    searchParams.cat === c.slug.current
-                      ? '#fb7185'
-                      : '#9ba3af',
-                  textDecoration: 'none',
+                  display: 'grid',
+                  gridTemplateColumns:
+                    'repeat(auto-fill,minmax(220px,1fr))',
+                  gap: 16,
                 }}
               >
-                {c.emoji} {c.nom}
-              </Link>
-            ))}
+                {profiles.map((p) => (
+                  <ProfileCard key={p._id} p={p} />
+                ))}
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '80px 0' }}>
+                Aucun profil trouvé.
+              </div>
+            )}
           </div>
-        </aside>
+
+          {/* RIGHT SIDEBAR */}
+          <div
+            style={{
+              width: 250,
+              display: 'none',
+            }}
+            className="desktop-only"
+          >
+            <div
+              style={{
+                background: 'rgba(21,25,32,.8)',
+                borderRadius: 14,
+                padding: 16,
+              }}
+            >
+              <h3 style={{ color: '#fb7185', fontSize: '.8rem' }}>
+                💝 Catégories
+              </h3>
+
+              {cats.map((c) => (
+                <Link
+                  key={c._id}
+                  href={`/annonces?cat=${c.slug.current}`}
+                  style={{
+                    display: 'block',
+                    padding: '6px 0',
+                    fontSize: '.85rem',
+                    color:
+                      searchParams.cat === c.slug.current
+                        ? '#fb7185'
+                        : '#9ba3af',
+                    textDecoration: 'none',
+                  }}
+                >
+                  {c.emoji} {c.nom}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* RESPONSIVE CSS */}
-      <style jsx>{`
-        .annonces-layout {
-          grid-template-columns: 260px 1fr 260px;
-        }
-
-        @media (max-width: 1200px) {
-          .annonces-layout {
-            grid-template-columns: 1fr;
+      {/* GLOBAL STYLE (NO styled-jsx) */}
+      <style>
+        {`
+          @media (min-width: 1200px) {
+            .desktop-only {
+              display: block !important;
+            }
           }
-
-          .sidebar-left,
-          .sidebar-right {
-            display: none;
-          }
-        }
-      `}</style>
+        `}
+      </style>
     </div>
   )
 }

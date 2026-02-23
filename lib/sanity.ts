@@ -251,4 +251,35 @@ export const SETTINGS_QUERY = `
     regionsSeoTitle,
     regionsSeoDescription
   }
+`/* ────────────────────────────────────────────────────────────── */
+/*  TRANSLATIONS (UI TEXT)                                       */
+/* ────────────────────────────────────────────────────────────── */
+
+export const TRANSLATIONS_QUERY = `
+  *[_type == "translations" && _id == "translations-default"][0]{
+    header_home,
+    header_annonces,
+    header_regions,
+    header_tags,
+    header_blog,
+
+    home_mainTitle,
+    home_subTitle,
+    home_buttonExploreRegions,
+
+    section_randomProfiles,
+
+    profile_similarTitle,
+    profile_continueCta,
+
+    blog_title,
+    blog_subtitle,
+
+    footer_legal,
+    footer_privacy,
+    footer_terms,
+    footer_affiliateNotice,
+    footer_adultNotice,
+    footer_copyright
+  }
 `

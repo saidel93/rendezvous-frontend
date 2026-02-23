@@ -13,20 +13,19 @@ export default function ProfileCard({ p }: { p: Profile }) {
       style={{
         textDecoration: 'none',
         display: 'block',
-        borderRadius: 14,
+        borderRadius: 10,
         overflow: 'hidden',
-        background: 'rgba(21,25,32,.9)',
-        border: '1px solid rgba(255,255,255,.08)',
-        transition: 'transform .2s, box-shadow .2s',
+        background: 'rgba(21,25,32,.95)',
+        border: '1px solid rgba(255,255,255,.06)',
+        transition: 'transform .15s ease',
         position: 'relative'
       }}
     >
-
-      {/* Photo (smaller height) */}
+      {/* Smaller photo */}
       <div
         style={{
           position: 'relative',
-          aspectRatio: '4/5', // reduced from 2/3 (less tall now)
+          aspectRatio: '1 / 1', // square → much smaller height
           overflow: 'hidden'
         }}
       >
@@ -41,22 +40,23 @@ export default function ProfileCard({ p }: { p: Profile }) {
           }}
         />
 
+        {/* Softer gradient */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
             background:
-              'linear-gradient(to top, rgba(12,15,20,1) 0%, rgba(12,15,20,.35) 50%, transparent 100%)'
+              'linear-gradient(to top, rgba(12,15,20,.9) 0%, rgba(12,15,20,.3) 50%, transparent 100%)'
           }}
         />
 
-        {/* Top badges */}
+        {/* Compact badges */}
         <div
           style={{
             position: 'absolute',
-            top: 8,
-            left: 8,
-            right: 8,
+            top: 6,
+            left: 6,
+            right: 6,
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'flex-start'
@@ -69,18 +69,17 @@ export default function ProfileCard({ p }: { p: Profile }) {
                 alignItems: 'center',
                 gap: 4,
                 background: 'rgba(34,197,94,.15)',
-                border: '1px solid rgba(34,197,94,.35)',
                 borderRadius: 50,
-                padding: '3px 8px',
-                fontSize: '.65rem',
+                padding: '2px 6px',
+                fontSize: '.6rem',
                 color: '#86efac',
                 fontWeight: 600
               }}
             >
               <span
                 style={{
-                  width: 6,
-                  height: 6,
+                  width: 5,
+                  height: 5,
                   background: '#22c55e',
                   borderRadius: '50%'
                 }}
@@ -94,65 +93,67 @@ export default function ProfileCard({ p }: { p: Profile }) {
               style={{
                 marginLeft: 'auto',
                 background: 'rgba(201,145,58,.2)',
-                border: '1px solid rgba(201,145,58,.4)',
                 borderRadius: 50,
-                padding: '3px 8px',
-                fontSize: '.65rem',
+                padding: '2px 6px',
+                fontSize: '.6rem',
                 color: '#e8b96a',
                 fontWeight: 600
               }}
             >
-              ★ Vedette
+              ★
             </span>
           )}
         </div>
 
-        {/* Bottom info on photo */}
+        {/* Smaller name block */}
         <div
           style={{
             position: 'absolute',
             bottom: 0,
             left: 0,
             right: 0,
-            padding: '12px'
+            padding: '8px'
           }}
         >
           <div
             style={{
               display: 'flex',
               alignItems: 'baseline',
-              gap: 6,
-              marginBottom: 4
+              gap: 4
             }}
           >
             <span
               style={{
                 fontFamily: "'Playfair Display', serif",
-                fontSize: '1.1rem', // slightly bigger
+                fontSize: '.9rem',
                 fontWeight: 700,
-                color: 'white'
+                color: 'white',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
               }}
             >
               {p.nom}
             </span>
             <span
               style={{
-                color: 'rgba(255,255,255,.75)',
-                fontSize: '.85rem'
+                color: 'rgba(255,255,255,.7)',
+                fontSize: '.7rem'
               }}
             >
-              {p.age} ans
+              {p.age}
             </span>
           </div>
 
           {p.ville && (
             <div
               style={{
-                fontSize: '.75rem',
+                fontSize: '.65rem',
                 color: 'rgba(255,255,255,.6)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 4
+                marginTop: 2,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
               }}
             >
               📍 {p.ville.nom}
@@ -161,51 +162,49 @@ export default function ProfileCard({ p }: { p: Profile }) {
         </div>
       </div>
 
-      {/* Bottom section */}
-      <div style={{ padding: '10px 12px 12px' }}>
+      {/* Much smaller bottom section */}
+      <div style={{ padding: '6px 8px 8px' }}>
         <p
           style={{
             color: '#9aa3af',
-            fontSize: '.8rem', // slightly bigger
-            lineHeight: 1.5,
-            marginBottom: 8,
+            fontSize: '.7rem',
+            lineHeight: 1.3,
+            marginBottom: 6,
             overflow: 'hidden',
             display: '-webkit-box',
-            WebkitLineClamp: 2,
+            WebkitLineClamp: 1,
             WebkitBoxOrient: 'vertical'
           }}
         >
           {p.tagline}
         </p>
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
           {p.categorie && (
             <span
               style={{
-                fontSize: '.65rem',
-                background: 'rgba(225,29,72,.08)',
-                border: '1px solid rgba(225,29,72,.2)',
+                fontSize: '.6rem',
+                background: 'rgba(225,29,72,.1)',
                 color: '#fb7185',
                 borderRadius: 50,
-                padding: '3px 8px'
+                padding: '2px 6px'
               }}
             >
-              {p.categorie.emoji} {p.categorie.nom}
+              {p.categorie.emoji}
             </span>
           )}
 
           {p.verifie?.photo && (
             <span
               style={{
-                fontSize: '.65rem',
-                background: 'rgba(201,145,58,.1)',
-                border: '1px solid rgba(201,145,58,.3)',
+                fontSize: '.6rem',
+                background: 'rgba(201,145,58,.15)',
                 color: '#e8b96a',
                 borderRadius: 50,
-                padding: '3px 8px'
+                padding: '2px 6px'
               }}
             >
-              ✓ Vérifié
+              ✓
             </span>
           )}
         </div>

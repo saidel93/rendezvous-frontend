@@ -69,8 +69,135 @@ export default async function AnnoncesPage({ searchParams }: { searchParams: { c
       </div>
 
       {/* ── Main layout ── */}
-      <div className="annonces-layout" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px 60px' }}>
+<div
+  style={{
+    maxWidth: 1500,
+    margin: '0 auto',
+    padding: '0 20px 60px',
+    display: 'grid',
+    gridTemplateColumns: '260px 1fr 260px',
+    gap: 28,
+  }}
+>
 
+  {/* ───────── LEFT SIDEBAR (VILLES) ───────── */}
+  <aside
+    style={{
+      position: 'sticky',
+      top: 120,
+      height: 'fit-content',
+    }}
+  >
+    <div
+      style={{
+        background: 'rgba(21,25,32,.8)',
+        border: '1px solid rgba(255,255,255,.07)',
+        borderRadius: 14,
+        padding: 16,
+      }}
+    >
+      <span style={{ color: '#7c8590', fontSize: '.7rem', fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', display: 'block', marginBottom: 12 }}>
+        🏙️ Villes
+      </span>
+
+      {cities.map(c => (
+        <Link
+          key={c._id}
+          href={`/annonces?city=${c.slug.current}`}
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            padding: '8px 0',
+            fontSize: '.85rem',
+            color: searchParams.city === c.slug.current ? '#fb7185' : '#9ba3af',
+            textDecoration: 'none',
+            borderBottom: '1px solid rgba(255,255,255,.04)'
+          }}
+        >
+          <span>📍 {c.nom}</span>
+          <span style={{
+            fontSize: '.7rem',
+            background: 'rgba(225,29,72,.1)',
+            padding: '2px 8px',
+            borderRadius: 50,
+            color: '#fb7185'
+          }}>
+            {c.profileCount || 0}
+          </span>
+        </Link>
+      ))}
+    </div>
+  </aside>
+
+
+  {/* ───────── CENTER PROFILES ───────── */}
+  <div>
+
+    <p style={{ color: 'white', fontWeight: 600, marginBottom: 20 }}>
+      {profiles.length} profil{profiles.length > 1 ? 's' : ''} trouvé{profiles.length > 1 ? 's' : ''}
+    </p>
+
+    {profiles.length > 0 ? (
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(6, 1fr)',
+          gap: 18,
+        }}
+      >
+        {profiles.map(p => (
+          <ProfileCard key={p._id} p={p} />
+        ))}
+      </div>
+    ) : (
+      <div style={{ textAlign: 'center', padding: '80px 0', color: '#7c8590' }}>
+        Aucun profil trouvé.
+      </div>
+    )}
+
+  </div>
+
+
+  {/* ───────── RIGHT SIDEBAR (CATÉGORIES) ───────── */}
+  <aside
+    style={{
+      position: 'sticky',
+      top: 120,
+      height: 'fit-content',
+    }}
+  >
+    <div
+      style={{
+        background: 'rgba(21,25,32,.8)',
+        border: '1px solid rgba(255,255,255,.07)',
+        borderRadius: 14,
+        padding: 16,
+      }}
+    >
+      <span style={{ color: '#7c8590', fontSize: '.7rem', fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', display: 'block', marginBottom: 12 }}>
+        💝 Catégories
+      </span>
+
+      {cats.map(c => (
+        <Link
+          key={c._id}
+          href={`/annonces?cat=${c.slug.current}`}
+          style={{
+            display: 'block',
+            padding: '8px 0',
+            fontSize: '.85rem',
+            color: searchParams.cat === c.slug.current ? '#fb7185' : '#9ba3af',
+            textDecoration: 'none',
+            borderBottom: '1px solid rgba(255,255,255,.04)'
+          }}
+        >
+          {c.emoji} {c.nom}
+        </Link>
+      ))}
+    </div>
+  </aside>
+
+</div>
         {/* Sidebar — hidden on mobile, shown on desktop */}
         <aside className="annonces-sidebar" style={{ position: 'sticky', top: 120 }}>
           <form method="get" style={{ marginBottom: 14 }}>

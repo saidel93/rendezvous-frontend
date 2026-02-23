@@ -1,14 +1,43 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { client, ALL_CITIES_QUERY } from '@/lib/sanity'
+import { client, ALL_CITIES_QUERY, SETTINGS_QUERY } from '@/lib/sanity'
 import type { Ville } from '@/lib/types'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
-export const metadata: Metadata = {
-  title: 'Régions – Rencontres par ville au Québec',
-  description:
-    'Explorez les rencontres par ville au Québec : Montréal, Québec, Laval, Gatineau, Sherbrooke et plus.',
+/* ───────────────────────────────────────────── */
+/* 🔥 Dynamic SEO from Sanity                   */
+/* ───────────────────────────────────────────── */
+
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const settings = await client.fetch(SETTINGS_QUERY)
+
+    return {
+      title:
+        settings?.regionsSeoTitle ??
+        'Régions – Rencontres par ville au Québec',
+
+      description:
+        settings?.regionsSeoDescription ??
+        'Explorez les rencontres par ville au Québec.',
+
+      openGraph: {
+        title:
+          settings?.regionsSeoTitle ??
+          'Régions – Rencontres par ville au Québec',
+
+        description:
+          settings?.regionsSeoDescription ??
+          'Explorez les rencontres par ville au Québec.',
+      },
+    }
+  } catch {
+    return {
+      title: 'Régions – RendezVous Québec',
+      description: 'Découvrez les profils par ville.',
+    }
+  }
 }
 
 export default async function RegionsPage() {
@@ -73,7 +102,6 @@ export default async function RegionsPage() {
                   borderRadius: 16,
                   padding: 24,
                   textDecoration: 'none',
-                  transition: '0.2s',
                   display: 'block',
                 }}
               >

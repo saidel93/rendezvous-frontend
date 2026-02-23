@@ -64,33 +64,57 @@ export function getAffiliateUrl(
 }
 
 /* ────────────────────────────────────────────────────────────── */
-/*  SEO HELPERS                                                  */
+/*  SEO HELPERS (AUTO)                                           */
 /* ────────────────────────────────────────────────────────────── */
 
-export function getProfileMetaTitle(profile: any): string {
-  if (profile?.seoTitle?.trim())
-    return profile.seoTitle.trim()
+function firstWords(text: string, n = 20): string {
+  const clean = text
+    .replace(/\s+/g, ' ')
+    .replace(/\n+/g, ' ')
+    .trim()
 
-  return `${profile.nom}, ${profile.age} ans à ${
-    profile.ville?.nom || 'Québec'
-  } – RendezVous Québec`
+  if (!clean) return ''
+
+  const words = clean.split(' ')
+  const out = words.slice(0, n).join(' ')
+  return words.length > n ? out + '…' : out
+}
+
+export function getProfileMetaTitle(profile: any): string {
+  const seoTitle = profile?.seoTitle?.trim()
+  if (seoTitle) return seoTitle
+
+  // ✅ automatic title (priority)
+  const hero = profile?.heroTitle?.trim()
+  if (hero) return hero
+
+  const tagline = profile?.tagline?.trim()
+  if (tagline) {
+    // keep it not too long
+    return tagline.length > 70 ? tagline.slice(0, 70).trim() + '…' : tagline
+  }
+
+  const nom = profile?.nom || 'Profil'
+  const age = profile?.age ? `${profile.age} ans` : ''
+  const ville = profile?.ville?.nom ? `à ${profile.ville.nom}` : 'au Québec'
+
+  return `${nom}${age ? `, ${age}` : ''} ${ville} – RendezVous Québec`
 }
 
 export function getProfileMetaDesc(profile: any): string {
-  if (profile?.seoDescription?.trim())
-    return profile.seoDescription.trim()
+  const seoDesc = profile?.seoDescription?.trim()
+  if (seoDesc) return seoDesc
 
-  if (profile?.bio?.trim()) {
-    const words = profile.bio.trim().split(/\s+/)
-    return (
-      words.slice(0, 20).join(' ') +
-      (words.length > 20 ? '…' : '')
-    )
-  }
+  const bio = profile?.bio?.trim()
+  if (bio) return firstWords(bio, 20)
 
-  return profile?.tagline || ''
+  const tagline = profile?.tagline?.trim()
+  if (tagline) return tagline
+
+  const nom = profile?.nom || 'Profil'
+  const ville = profile?.ville?.nom || 'Québec'
+  return `Découvrez ${nom} et d’autres profils à ${ville} sur RendezVous Québec.`
 }
-
 /* ────────────────────────────────────────────────────────────── */
 /*  COMMON PROFILE FIELDS                                        */
 /* ────────────────────────────────────────────────────────────── */
@@ -221,6 +245,10 @@ export const SETTINGS_QUERY = `
     siteName,
     siteDescription,
     homeSeoTitle,
-    homeSeoDescription
+    homeSeoDescription,
+    categoriesSeoTitle,
+    categoriesSeoDescription,
+    regionsSeoTitle,
+    regionsSeoDescription
   }
 `

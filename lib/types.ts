@@ -2,8 +2,10 @@ export interface Ville {
   _id: string
   nom: string
   slug: { current: string }
-  region: string
+  region?: string
   profileCount?: number
+
+  // SEO
   seoTitle?: string
   seoDescription?: string
 }
@@ -12,9 +14,11 @@ export interface Categorie {
   _id: string
   nom: string
   slug: { current: string }
-  emoji: string
+  emoji?: string
   description?: string
   profileCount?: number
+
+  // SEO
   seoTitle?: string
   seoDescription?: string
 }
@@ -22,20 +26,36 @@ export interface Categorie {
 export interface Profile {
   _id: string
   slug: { current: string }
+
   nom: string
   age: number
-  ville: Ville
-  categorie: Categorie
-  tagline: string
+
+  ville?: Ville
+  categorie?: Categorie
+
+  tagline?: string
   bio?: string
   heroTitle?: string
+
+  // SEO
   seoTitle?: string
   seoDescription?: string
-  photoUrl?: string
+
+  // Images (Sanity native)
   photo?: any
-  photosUrls?: { url: string; alt?: string }[]
   photos?: any[]
-  verifie?: { photo?: boolean; email?: boolean; telephone?: boolean; premium?: boolean }
+
+  // Legacy (keep optional for safety)
+  photoUrl?: string
+  photosUrls?: { url: string; alt?: string }[]
+
+  verifie?: {
+    photo?: boolean
+    email?: boolean
+    telephone?: boolean
+    premium?: boolean
+  }
+
   online?: boolean
   vedette?: boolean
   membreDepuis?: string
@@ -45,7 +65,11 @@ export interface Profile {
 }
 
 export interface SiteSettings {
-  affiliateUrl: string
-  siteName: string
-  siteDescription: string
+  affiliateUrl?: string
+  siteName?: string
+  siteDescription?: string
+
+  // Homepage SEO
+  homeSeoTitle?: string
+  homeSeoDescription?: string
 }

@@ -10,7 +10,6 @@ import {
   getProfileMetaTitle,
   getProfileMetaDesc,
 } from '@/lib/sanity'
-import Link from 'next/link'
 import type { Profile, SiteSettings } from '@/lib/types'
 import { notFound } from 'next/navigation'
 import ProfileCard from '@/components/ProfileCard'
@@ -32,10 +31,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       openGraph: {
         title,
         description: desc,
-        images: [{ url: image, width: 400, height: 500, alt: `${p.nom}, ${p.age} ans` }],
+        images: [{ url: image, width: 400, height: 500 }],
         type: 'profile',
       },
-      twitter: { card: 'summary_large_image', title, description: desc, images: [image] },
     }
   } catch {
     return { title: 'Profil' }
@@ -66,10 +64,14 @@ export default async function ProfilePage({ params }: { params: { slug: string }
     .slice(0, 4)
 
   const responsiveStyle = `
-    @media (min-width: 900px) {
+    @media (min-width: 1024px) {
       .profile-grid {
-        grid-template-columns: minmax(0,1fr) minmax(0,1.3fr);
-        gap: 50px;
+        grid-template-columns: 420px 1fr;
+        gap: 60px;
+      }
+
+      .image-column {
+        max-width: 420px;
       }
     }
   `
@@ -80,7 +82,7 @@ export default async function ProfilePage({ params }: { params: { slug: string }
 
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '40px 20px' }}>
 
-        {/* ───────── MAIN GRID ───────── */}
+        {/* MAIN GRID */}
         <div
           className="profile-grid"
           style={{
@@ -92,16 +94,14 @@ export default async function ProfilePage({ params }: { params: { slug: string }
           }}
         >
 
-          {/* ───────── IMAGE COLUMN ───────── */}
-          <div style={{ width: '100%' }}>
+          {/* IMAGE COLUMN */}
+          <div className="image-column" style={{ width: '100%' }}>
             <div
               style={{
                 borderRadius: 18,
                 overflow: 'hidden',
                 aspectRatio: '4/5',
-                position: 'relative',
                 marginBottom: 16,
-                width: '100%',
               }}
             >
               <img
@@ -126,7 +126,7 @@ export default async function ProfilePage({ params }: { params: { slug: string }
             )}
           </div>
 
-          {/* ───────── INFO COLUMN ───────── */}
+          {/* INFO COLUMN */}
           <div>
 
             <h1
@@ -218,7 +218,7 @@ export default async function ProfilePage({ params }: { params: { slug: string }
           </div>
         </div>
 
-        {/* ───────── RELATED ───────── */}
+        {/* RELATED */}
         {sameCity.length > 0 && (
           <div>
             <h3
@@ -235,7 +235,7 @@ export default async function ProfilePage({ params }: { params: { slug: string }
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill,minmax(160px,1fr))',
+                gridTemplateColumns: 'repeat(auto-fill,minmax(180px,1fr))',
                 gap: 16,
               }}
             >

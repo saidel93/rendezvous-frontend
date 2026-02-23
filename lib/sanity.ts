@@ -204,7 +204,7 @@ export const CITY_BY_SLUG_QUERY = `
 `
 
 /* ────────────────────────────────────────────────────────────── */
-/*  CATEGORIES                                                    */
+/*  CATEGORIES (FIXED PROFILE COUNT WITH REFERENCES)             */
 /* ────────────────────────────────────────────────────────────── */
 
 export const ALL_CATEGORIES_QUERY = `
@@ -216,7 +216,7 @@ export const ALL_CATEGORIES_QUERY = `
     emoji,
     description,
     "profileCount": count(
-      *[_type == "profile" && categorie._ref == ^._id]
+      *[_type == "profile" && references(^._id)]
     )
   }
 `
@@ -232,7 +232,6 @@ export const CAT_BY_SLUG_QUERY = `
     seoDescription
   }
 `
-
 /* ────────────────────────────────────────────────────────────── */
 /*  SETTINGS                                                      */
 /* ────────────────────────────────────────────────────────────── */

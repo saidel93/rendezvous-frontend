@@ -5,6 +5,7 @@ import {
   FEATURED_QUERY,
   ALL_CITIES_QUERY,
   ALL_CATEGORIES_QUERY,
+  ALL_PROFILES_QUERY,
 } from '@/lib/sanity'
 import ProfileCard from '@/components/ProfileCard'
 import type { Profile, Ville, Categorie } from '@/lib/types'
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
   title:
     'RendezVous Québec – Rencontres authentiques au Québec',
   description:
-    'Des milliers de profils vérifiés à travers le Québec. Trouvez votre partenaire idéal à Montréal, Québec, Laval et partout au Québec.',
+    'Des milliers de profils vérifiés à travers le Québec.',
 }
 
 export default async function HomePage() {
@@ -29,7 +30,14 @@ export default async function HomePage() {
       client.fetch(ALL_CITIES_QUERY),
       client.fetch(ALL_CATEGORIES_QUERY),
     ])
-  } catch (e) {}
+
+    // 🔥 If no featured profiles → fallback to latest profiles
+    if (!featured || featured.length === 0) {
+      featured = await client.fetch(ALL_PROFILES_QUERY + '[0...8]')
+    }
+  } catch (e) {
+    console.error(e)
+  }
 
   return (
     <div>
@@ -47,7 +55,7 @@ export default async function HomePage() {
       {/* HERO */}
       <section
         style={{
-          padding: '40px 0 0',
+          padding: '30px 0 10px',
           position: 'relative',
           zIndex: 1,
         }}
@@ -60,41 +68,13 @@ export default async function HomePage() {
             textAlign: 'center',
           }}
         >
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              background: 'rgba(225,29,72,.08)',
-              border: '1px solid rgba(225,29,72,.2)',
-              borderRadius: 50,
-              padding: '6px 14px',
-              fontSize: '.82rem',
-              color: '#7c8590',
-              marginBottom: 14,
-            }}
-          >
-            <span
-              style={{
-                width: 7,
-                height: 7,
-                background: '#22c55e',
-                borderRadius: '50%',
-              }}
-            />
-            <strong style={{ color: '#86efac' }}>
-              {Math.floor(Math.random() * 71) + 50}
-            </strong>{' '}
-            membres en ligne
-          </div>
-
           <h1
             style={{
-              fontSize: 'clamp(2rem,5vw,3rem)',
+              fontSize: 'clamp(2rem,5vw,2.8rem)',
               fontWeight: 700,
-              marginBottom: 12,
+              marginBottom: 10,
               color: 'white',
-              lineHeight: 1.15,
+              lineHeight: 1.2,
             }}
           >
             Trouvez votre <br />
@@ -114,11 +94,11 @@ export default async function HomePage() {
           <p
             style={{
               maxWidth: 500,
-              margin: '0 auto 18px',
+              margin: '0 auto 16px',
               color: '#7c8590',
             }}
           >
-            Des milliers de profils vérifiés. De vraies connexions.
+            Des milliers de profils vérifiés.
           </p>
 
           <div
@@ -135,16 +115,14 @@ export default async function HomePage() {
               style={{
                 background:
                   'linear-gradient(135deg,#e11d48,#9f1239)',
-                boxShadow:
-                  '0 4px 20px rgba(225,29,72,.4)',
                 color: '#fff',
                 fontWeight: 700,
-                padding: '12px 26px',
+                padding: '10px 22px',
                 borderRadius: 14,
                 textDecoration: 'none',
               }}
             >
-              ❤ Parcourir les profils
+              ❤ Parcourir
             </Link>
 
             <Link
@@ -153,12 +131,12 @@ export default async function HomePage() {
                 background: 'rgba(255,255,255,.05)',
                 border: '1px solid rgba(255,255,255,.1)',
                 color: 'white',
-                padding: '12px 26px',
+                padding: '10px 22px',
                 borderRadius: 14,
                 textDecoration: 'none',
               }}
             >
-              📍 Par région
+              📍 Régions
             </Link>
           </div>
         </div>
@@ -167,7 +145,7 @@ export default async function HomePage() {
       {/* FEATURED */}
       <section
         style={{
-          padding: '10px 0 60px',
+          padding: '10px 0 50px',
           position: 'relative',
           zIndex: 1,
         }}
@@ -179,44 +157,24 @@ export default async function HomePage() {
             padding: '0 20px',
           }}
         >
-          <div
+          <h2
             style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: 18,
+              fontSize: '1.4rem',
+              color: 'white',
+              marginBottom: 16,
+              fontWeight: 700,
             }}
           >
-            <h2
-              style={{
-                fontSize: '1.6rem',
-                color: 'white',
-                fontWeight: 700,
-              }}
-            >
-              ⭐ Profils Vedettes
-            </h2>
-
-            <Link
-              href="/annonces"
-              style={{
-                color: '#fb7185',
-                textDecoration: 'none',
-                fontSize: '.85rem',
-                fontWeight: 600,
-              }}
-            >
-              Voir tout →
-            </Link>
-          </div>
+            ⭐ Profils récents
+          </h2>
 
           {featured.length > 0 ? (
             <div
               style={{
                 display: 'grid',
                 gridTemplateColumns:
-                  'repeat(auto-fill,minmax(240px,1fr))',
-                gap: 16,
+                  'repeat(auto-fill,minmax(230px,1fr))',
+                gap: 14,
               }}
             >
               {featured.map((p) => (
@@ -227,11 +185,11 @@ export default async function HomePage() {
             <div
               style={{
                 textAlign: 'center',
-                padding: '40px 0',
+                padding: '30px 0',
                 color: '#7c8590',
               }}
             >
-              Aucun profil vedette pour le moment.
+              Aucun profil disponible.
             </div>
           )}
         </div>

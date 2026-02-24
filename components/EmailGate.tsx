@@ -32,7 +32,6 @@ export default function EmailGate({
       }),
     })
 
-    // Fake verification delay (boost conversion)
     setTimeout(() => {
       window.location.href = affiliateUrl
     }, 2000)
@@ -40,38 +39,132 @@ export default function EmailGate({
 
   return (
     <>
+      {/* 🔥 RESTORED SEXY CTA BUTTON */}
       <button
         onClick={() => setOpen(true)}
-        className="bg-red-600 text-white px-6 py-3 rounded-lg font-bold"
+        className="ctaBtn"
+        style={{
+          display: 'block',
+          width: '100%',
+          padding: '18px',
+          borderRadius: '14px',
+          background:
+            'linear-gradient(135deg,#e11d48,#9f1239)',
+          boxShadow:
+            '0 10px 30px rgba(225,29,72,.4)',
+          color: '#fff',
+          fontSize: '1.1rem',
+          fontWeight: 700,
+          textAlign: 'center',
+          border: 'none',
+          cursor: 'pointer',
+        }}
       >
-        🔒 Go to plateforme sécurisée
+        🔒 Continuer sur la plateforme sécurisée
       </button>
 
+      {/* 🔥 PREMIUM POPUP */}
       {open && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-xl w-[90%] max-w-md text-center">
-            <h2 className="text-xl font-bold mb-4">
-              Vérification sécurisée 🔐
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,.75)',
+            backdropFilter: 'blur(6px)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 9999,
+            animation: 'fadeIn .3s ease',
+          }}
+        >
+          <div
+            style={{
+              background:
+                'linear-gradient(135deg,#0f172a,#1e293b)',
+              padding: '40px',
+              borderRadius: '22px',
+              width: '90%',
+              maxWidth: '450px',
+              textAlign: 'center',
+              border:
+                '1px solid rgba(225,29,72,.3)',
+              boxShadow:
+                '0 30px 80px rgba(0,0,0,.6)',
+              animation: 'slideUp .3s ease',
+            }}
+          >
+            <h2
+              style={{
+                color: '#fff',
+                fontSize: '1.8rem',
+                marginBottom: '10px',
+              }}
+            >
+              🔐 Accès Privé Sécurisé
             </h2>
+
+            <p
+              style={{
+                color: '#cbd5e1',
+                fontSize: '0.95rem',
+                marginBottom: '25px',
+              }}
+            >
+              {profileName} vous attend à {city}.
+              <br />
+              Confirmez votre email pour accéder
+              immédiatement.
+            </p>
 
             <input
               type="email"
-              placeholder="Entrez votre email"
+              placeholder="Entrez votre email privé..."
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="border p-2 w-full mb-4 rounded"
+              style={{
+                width: '100%',
+                padding: '14px',
+                borderRadius: '10px',
+                border: '1px solid #334155',
+                marginBottom: '18px',
+                fontSize: '1rem',
+                outline: 'none',
+              }}
             />
 
             <button
               onClick={handleSubmit}
               disabled={loading}
-              className="bg-green-600 text-white px-4 py-2 rounded w-full"
+              style={{
+                width: '100%',
+                padding: '15px',
+                borderRadius: '12px',
+                background:
+                  'linear-gradient(135deg,#e11d48,#be123c)',
+                color: '#fff',
+                fontWeight: 700,
+                border: 'none',
+                cursor: 'pointer',
+              }}
             >
-              {loading ? 'Vérification...' : 'Continuer'}
+              {loading
+                ? 'Vérification en cours...'
+                : '🔥 Accéder maintenant'}
             </button>
 
-            <p className="text-xs mt-3 text-gray-500">
-              En continuant, vous acceptez nos conditions.
+            <p
+              style={{
+                marginTop: '15px',
+                fontSize: '0.75rem',
+                color: '#94a3b8',
+              }}
+            >
+              ✔ 100% confidentiel
+              <br />
+              ✔ Aucun spam
+              <br />
+              ✔ Accès immédiat
             </p>
           </div>
         </div>

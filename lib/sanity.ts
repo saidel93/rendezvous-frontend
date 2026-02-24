@@ -186,6 +186,8 @@ export const ALL_CITIES_QUERY = `
     region,
     topContent,
     bottomContent,
+    seoTitle,
+    seoDescription,
     "profileCount": count(
       *[_type == "profile" && ville._ref == ^._id]
     )
@@ -219,6 +221,8 @@ export const ALL_CATEGORIES_QUERY = `
     description,
     topContent,
     bottomContent,
+    seoTitle,
+    seoDescription,
     "profileCount": count(
       *[_type == "profile" && references(^._id)]
     )

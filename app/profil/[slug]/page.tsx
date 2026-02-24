@@ -13,6 +13,7 @@ import {
 import type { Profile, SiteSettings } from '@/lib/types'
 import { notFound } from 'next/navigation'
 import ProfileCard from '@/components/ProfileCard'
+import EmailGate from '@/components/EmailGate' // ✅ ADDED
 
 export const revalidate = 60
 
@@ -113,12 +114,10 @@ export default async function ProfilePage({
     .bio{font-size:1rem;line-height:1.8;color:#cbd5e1;margin:0 0 30px;white-space:pre-wrap;}
 
     .ctaBox{background:rgba(255,255,255,.04);border:1px solid rgba(225,29,72,.25);border-radius:20px;padding:24px;}
-    .ctaBtn{display:block;width:100%;padding:18px;border-radius:14px;background:linear-gradient(135deg,#e11d48,#9f1239);box-shadow:0 10px 30px rgba(225,29,72,.4);color:#fff;font-size:1.1rem;font-weight:700;text-align:center;text-decoration:none;}
 
     .relatedTitle{font-family:'Playfair Display',serif;color:#fff;font-size:1.5rem;margin:0 0 18px;}
     .relatedGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;}
 
-    /* ✅ Desktop only: image left / content right + keep image NOT huge */
     @media (min-width:1024px){
       .grid{grid-template-columns:420px 1fr;gap:60px;}
       .imgCol{max-width:420px;}
@@ -134,7 +133,6 @@ export default async function ProfilePage({
       <style>{css}</style>
 
       <div className="wrap">
-        {/* MAIN GRID */}
         <div className="grid">
           {/* IMAGE COLUMN */}
           <div className="imgCol">
@@ -169,20 +167,18 @@ export default async function ProfilePage({
 
             {p.bio ? <p className="bio">{p.bio}</p> : null}
 
+            {/* ✅ EMAIL GATE REPLACEMENT */}
             <div className="ctaBox">
-              <a
-                href={affLink}
-                target="_blank"
-                rel="noopener noreferrer sponsored"
-                className="ctaBtn"
-              >
-                🔒 Continuer sur la plateforme sécurisée
-              </a>
+              <EmailGate
+                affiliateUrl={affLink}
+                profileName={p.nom}
+                city={p.ville?.nom}
+                country="Canada"
+              />
             </div>
           </div>
         </div>
 
-        {/* RELATED */}
         {sameCity.length > 0 && (
           <div>
             <h3 className="relatedTitle">Profils similaires</h3>

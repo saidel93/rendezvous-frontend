@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import {
   client,
   PROFILES_BY_CITY_QUERY,
-  ALL_CITIES_QUERY,
   ALL_CATEGORIES_QUERY,
   CITY_BY_SLUG_QUERY,
 } from '@/lib/sanity'
@@ -39,7 +38,6 @@ export async function generateMetadata({
       city.seoDescription ??
       `Rencontrez des célibataires à ${city.nom}. Profils vérifiés au Québec.`
 
-    // 🔥 If filtered by category → inject keyword
     if (searchParams?.cat) {
       const cats: Categorie[] =
         await client.fetch(ALL_CATEGORIES_QUERY)
@@ -49,7 +47,7 @@ export async function generateMetadata({
       )
 
       if (cat) {
-        title = `${cat.nom} à ${city.nom} ${cat.emoji}`
+        title = `${cat.nom} à ${city.nom} ${cat.emoji ?? ''}`
         description = `Profils ${cat.nom} à ${city.nom}. Rencontres locales authentiques.`
       }
     }
@@ -76,24 +74,24 @@ export default async function RegionPage({
   searchParams: { cat?: string }
 }) {
   let profiles: Profile[] = []
-  let cities: Ville[] = []
   let cats: Categorie[] = []
+  let city: Ville | null = null
 
   try {
-    ;[profiles, cities, cats] = await Promise.all([
+    ;[profiles, cats, city] = await Promise.all([
       client.fetch(PROFILES_BY_CITY_QUERY, {
         citySlug: params.slug,
       }),
-      client.fetch(ALL_CITIES_QUERY),
       client.fetch(ALL_CATEGORIES_QUERY),
+      client.fetch(CITY_BY_SLUG_QUERY, {
+        slug: params.slug,
+      }),
     ])
   } catch (e) {
     console.error(e)
   }
 
-  const city = cities.find(
-    (c) => c.slug.current === params.slug
-  )
+  if (!city) return null
 
   const filtered = searchParams?.cat
     ? profiles.filter(
@@ -108,8 +106,7 @@ export default async function RegionPage({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '8px 0',
-    borderBottom:
-      '1px solid rgba(255,255,255,.04)',
+    borderBottom: '1px solid rgba(255,255,255,.04)',
     color: '#7c8590',
     fontSize: '.83rem',
     textDecoration: 'none',
@@ -117,7 +114,7 @@ export default async function RegionPage({
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
-      {/* Header */}
+      {/* HEADER */}
       <div
         style={{
           padding: '40px 0 28px',
@@ -135,12 +132,7 @@ export default async function RegionPage({
             padding: '0 20px',
           }}
         >
-          <span
-            style={{
-              color: '#3e444d',
-              fontSize: '.78rem',
-            }}
-          >
+          <span style={{ color: '#3e444d', fontSize: '.78rem' }}>
             Accueil ›{' '}
             <Link
               href="/regions"
@@ -153,7 +145,7 @@ export default async function RegionPage({
             </Link>{' '}
             ›{' '}
             <span style={{ color: '#fb7185' }}>
-              {city?.nom}
+              {city.nom}
             </span>
           </span>
 
@@ -165,7 +157,7 @@ export default async function RegionPage({
               marginBottom: 6,
             }}
           >
-            Célibataires à {city?.nom}
+            Célibataires à {city.nom}
           </h1>
 
           <p
@@ -175,8 +167,7 @@ export default async function RegionPage({
             }}
           >
             {profiles.length} profil
-            {profiles.length !== 1 ? 's' : ''} dans
-            cette région
+            {profiles.length !== 1 ? 's' : ''} dans cette région
           </p>
         </div>
       </div>
@@ -191,14 +182,12 @@ export default async function RegionPage({
           gap: 24,
         }}
       >
-        {/* Sidebar */}
+        {/* SIDEBAR */}
         <aside style={{ position: 'sticky', top: 120 }}>
           <div
             style={{
-              background:
-                'rgba(21,25,32,.8)',
-              border:
-                '1px solid rgba(255,255,255,.07)',
+              background: 'rgba(21,25,32,.8)',
+              border: '1px solid rgba(255,255,255,.07)',
               borderRadius: 14,
               padding: 16,
               marginBottom: 12,
@@ -238,6 +227,8 @@ export default async function RegionPage({
                   c.slug.current
               ).length
 
+              if (!count) return null
+
               return (
                 <Link
                   key={c._id}
@@ -261,8 +252,23 @@ export default async function RegionPage({
           </div>
         </aside>
 
-        {/* Profiles Grid */}
+        {/* MAIN CONTENT */}
         <div>
+          {/* 🔥 TOP SEO CONTENT */}
+          {city.topContent && (
+            <div
+              style={{
+                marginBottom: 40,
+                fontSize: '1rem',
+                lineHeight: 1.8,
+                color: '#cbd5e1',
+                whiteSpace: 'pre-wrap',
+              }}
+            >
+              {city.topContent}
+            </div>
+          )}
+
           <p
             style={{
               color: 'white',
@@ -271,8 +277,7 @@ export default async function RegionPage({
             }}
           >
             {filtered.length} profil
-            {filtered.length !== 1 ? 's' : ''}{' '}
-            trouvé
+            {filtered.length !== 1 ? 's' : ''} trouvé
             {filtered.length !== 1 ? 's' : ''}
           </p>
 
@@ -286,10 +291,7 @@ export default async function RegionPage({
               }}
             >
               {filtered.map((p) => (
-                <ProfileCard
-                  key={p._id}
-                  p={p}
-                />
+                <ProfileCard key={p._id} p={p} />
               ))}
             </div>
           ) : (
@@ -301,6 +303,32 @@ export default async function RegionPage({
               }}
             >
               Aucun profil pour cette combinaison.
+            </div>
+          )}
+
+          {/* 🔥 BOTTOM SEO CONTENT */}
+          {city.bottomContent && (
+            <div
+              style={{
+                marginTop: 60,
+                paddingTop: 40,
+                borderTop:
+                  '1px solid rgba(255,255,255,.08)',
+                fontSize: '1rem',
+                lineHeight: 1.9,
+                color: '#cbd5e1',
+                whiteSpace: 'pre-wrap',
+              }}
+            >
+              <h2
+                style={{
+                  color: 'white',
+                  marginBottom: 16,
+                }}
+              >
+                Rencontres à {city.nom}
+              </h2>
+              {city.bottomContent}
             </div>
           )}
         </div>

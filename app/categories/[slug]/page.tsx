@@ -3,7 +3,6 @@ import {
   client,
   PROFILES_BY_CAT_QUERY,
   ALL_CITIES_QUERY,
-  ALL_CATEGORIES_QUERY,
   CAT_BY_SLUG_QUERY,
 } from '@/lib/sanity'
 import ProfileCard from '@/components/ProfileCard'
@@ -29,20 +28,17 @@ export async function generateMetadata({
       { slug: params.slug }
     )
 
-    if (!cat) {
-      return { title: 'Catégorie' }
-    }
+    if (!cat) return { title: 'Catégorie' }
 
     let title =
       cat.seoTitle ??
-      `${cat.nom} au Québec – Rencontres ${cat.emoji}`
+      `${cat.nom} au Québec – Rencontres ${cat.emoji ?? ''}`
 
     let description =
       cat.seoDescription ??
       cat.description ??
       `Trouvez des profils "${cat.nom}" au Québec.`
 
-    // If city filter active → SEO becomes localized
     if (searchParams?.city) {
       const cities: Ville[] =
         await client.fetch(ALL_CITIES_QUERY)
@@ -52,7 +48,7 @@ export async function generateMetadata({
       )
 
       if (city) {
-        title = `${cat.nom} à ${city.nom} ${cat.emoji}`
+        title = `${cat.nom} à ${city.nom} ${cat.emoji ?? ''}`
         description = `Profils "${cat.nom}" à ${city.nom}. Rencontres locales.`
       }
     }
@@ -80,29 +76,30 @@ export default async function CategoryPage({
 }) {
   let profiles: Profile[] = []
   let cities: Ville[] = []
-  let cats: Categorie[] = []
+  let cat: Categorie | null = null
 
   try {
-    ;[profiles, cities, cats] = await Promise.all([
+    ;[profiles, cities, cat] = await Promise.all([
       client.fetch(PROFILES_BY_CAT_QUERY, {
         catSlug: params.slug,
       }),
       client.fetch(ALL_CITIES_QUERY),
-      client.fetch(ALL_CATEGORIES_QUERY),
+      client.fetch(CAT_BY_SLUG_QUERY, {
+        slug: params.slug,
+      }),
     ])
   } catch (e) {
     console.error(e)
   }
 
-  const cat = cats.find(
-    (c) => c.slug.current === params.slug
-  )
+  if (!cat) {
+    return null
+  }
 
   const filtered = searchParams?.city
     ? profiles.filter(
         (p) =>
-          p.ville?.slug?.current ===
-          searchParams.city
+          p.ville?.slug?.current === searchParams.city
       )
     : profiles
 
@@ -123,7 +120,7 @@ export default async function CategoryPage({
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
-      {/* Header */}
+      {/* HEADER */}
       <div
         style={{
           padding: '40px 0 28px',
@@ -141,25 +138,17 @@ export default async function CategoryPage({
             padding: '0 20px',
           }}
         >
-          <span
-            style={{
-              color: '#3e444d',
-              fontSize: '.78rem',
-            }}
-          >
+          <span style={{ color: '#3e444d', fontSize: '.78rem' }}>
             Accueil ›{' '}
             <Link
               href="/categories"
-              style={{
-                color: '#7c8590',
-                textDecoration: 'none',
-              }}
+              style={{ color: '#7c8590', textDecoration: 'none' }}
             >
               Catégories
             </Link>{' '}
             ›{' '}
             <span style={{ color: '#fb7185' }}>
-              {cat?.nom}
+              {cat.nom}
             </span>
           </span>
 
@@ -171,10 +160,10 @@ export default async function CategoryPage({
               marginBottom: 6,
             }}
           >
-            {cat?.emoji} {cat?.nom}
+            {cat.emoji} {cat.nom}
           </h1>
 
-          {cat?.description && (
+          {cat.description && (
             <p
               style={{
                 color: '#7c8590',
@@ -194,13 +183,26 @@ export default async function CategoryPage({
           padding: '0 20px 60px',
         }}
       >
-        {/* City filter */}
+        {/* 🔥 TOP SEO CONTENT */}
+        {cat.topContent && (
+          <div
+            style={{
+              marginBottom: 40,
+              fontSize: '1rem',
+              lineHeight: 1.8,
+              color: '#cbd5e1',
+              whiteSpace: 'pre-wrap',
+            }}
+          >
+            {cat.topContent}
+          </div>
+        )}
+
+        {/* CITY FILTER */}
         <div
           style={{
-            background:
-              'rgba(21,25,32,.8)',
-            border:
-              '1px solid rgba(255,255,255,.07)',
+            background: 'rgba(21,25,32,.8)',
+            border: '1px solid rgba(255,255,255,.07)',
             borderRadius: 14,
             padding: '20px 24px',
             marginBottom: 28,
@@ -219,13 +221,7 @@ export default async function CategoryPage({
             Choisissez votre ville
           </div>
 
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: 8,
-            }}
-          >
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             <Link
               href={`/categories/${params.slug}`}
               style={pill(!searchParams?.city)}
@@ -258,7 +254,7 @@ export default async function CategoryPage({
           </div>
         </div>
 
-        {/* Profiles Grid */}
+        {/* PROFILES GRID */}
         <p
           style={{
             color: 'white',
@@ -267,8 +263,7 @@ export default async function CategoryPage({
           }}
         >
           {filtered.length} profil
-          {filtered.length !== 1 ? 's' : ''}{' '}
-          trouvé
+          {filtered.length !== 1 ? 's' : ''} trouvé
           {filtered.length !== 1 ? 's' : ''}
         </p>
 
@@ -282,10 +277,7 @@ export default async function CategoryPage({
             }}
           >
             {filtered.map((p) => (
-              <ProfileCard
-                key={p._id}
-                p={p}
-              />
+              <ProfileCard key={p._id} p={p} />
             ))}
           </div>
         ) : (
@@ -297,6 +289,32 @@ export default async function CategoryPage({
             }}
           >
             Aucun profil pour cette combinaison.
+          </div>
+        )}
+
+        {/* 🔥 BOTTOM SEO CONTENT */}
+        {cat.bottomContent && (
+          <div
+            style={{
+              marginTop: 60,
+              paddingTop: 40,
+              borderTop:
+                '1px solid rgba(255,255,255,.08)',
+              fontSize: '1rem',
+              lineHeight: 1.9,
+              color: '#cbd5e1',
+              whiteSpace: 'pre-wrap',
+            }}
+          >
+            <h2
+              style={{
+                color: 'white',
+                marginBottom: 16,
+              }}
+            >
+              À propos de {cat.nom}
+            </h2>
+            {cat.bottomContent}
           </div>
         )}
       </div>

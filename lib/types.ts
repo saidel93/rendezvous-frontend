@@ -5,7 +5,11 @@ export interface Ville {
   region?: string
   profileCount?: number
 
-  // SEO
+  /* 🔥 SEO CONTENT BLOCKS */
+  topContent?: string
+  bottomContent?: string
+
+  /* 🔍 SEO */
   seoTitle?: string
   seoDescription?: string
 }
@@ -18,7 +22,11 @@ export interface Categorie {
   description?: string
   profileCount?: number
 
-  // SEO
+  /* 🔥 SEO CONTENT BLOCKS */
+  topContent?: string
+  bottomContent?: string
+
+  /* 🔍 SEO */
   seoTitle?: string
   seoDescription?: string
 }
@@ -37,15 +45,15 @@ export interface Profile {
   bio?: string
   heroTitle?: string
 
-  // SEO
+  /* 🔍 SEO */
   seoTitle?: string
   seoDescription?: string
 
-  // Images (Sanity native)
+  /* 🖼 Images (Sanity native) */
   photo?: any
   photos?: any[]
 
-  // Legacy (keep optional for safety)
+  /* ⚠ Legacy (keep optional for safety) */
   photoUrl?: string
   photosUrls?: { url: string; alt?: string }[]
 
@@ -69,7 +77,15 @@ export interface SiteSettings {
   siteName?: string
   siteDescription?: string
 
-  // Homepage SEO
+  /* 🔍 Homepage SEO */
   homeSeoTitle?: string
   homeSeoDescription?: string
+
+  /* 🔍 Categories Page SEO */
+  categoriesSeoTitle?: string
+  categoriesSeoDescription?: string
+
+  /* 🔍 Regions Page SEO */
+  regionsSeoTitle?: string
+  regionsSeoDescription?: string
 }

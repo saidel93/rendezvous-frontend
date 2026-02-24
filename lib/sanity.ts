@@ -19,7 +19,7 @@ const builder = imageUrlBuilder(client)
 export const urlFor = (source: any) => builder.image(source)
 
 /* ────────────────────────────────────────────────────────────── */
-/*  IMAGE HELPERS (UPLOAD ONLY)                                  */
+/*  IMAGE HELPERS                                                */
 /* ────────────────────────────────────────────────────────────── */
 
 export function getPhotoSrc(profile: any, w = 400, h = 500): string {
@@ -56,23 +56,15 @@ export function getAffiliateUrl(
   profile: any,
   settings: SiteSettings | null
 ): string {
-  return (
-    profile?.affiliateUrl ||
-    settings?.affiliateUrl ||
-    '#'
-  )
+  return profile?.affiliateUrl || settings?.affiliateUrl || '#'
 }
 
 /* ────────────────────────────────────────────────────────────── */
-/*  SEO HELPERS (AUTO)                                           */
+/*  SEO HELPERS                                                  */
 /* ────────────────────────────────────────────────────────────── */
 
 function firstWords(text: string, n = 20): string {
-  const clean = text
-    .replace(/\s+/g, ' ')
-    .replace(/\n+/g, ' ')
-    .trim()
-
+  const clean = text.replace(/\s+/g, ' ').replace(/\n+/g, ' ').trim()
   if (!clean) return ''
 
   const words = clean.split(' ')
@@ -84,19 +76,21 @@ export function getProfileMetaTitle(profile: any): string {
   const seoTitle = profile?.seoTitle?.trim()
   if (seoTitle) return seoTitle
 
-  // ✅ automatic title (priority)
   const hero = profile?.heroTitle?.trim()
   if (hero) return hero
 
   const tagline = profile?.tagline?.trim()
   if (tagline) {
-    // keep it not too long
-    return tagline.length > 70 ? tagline.slice(0, 70).trim() + '…' : tagline
+    return tagline.length > 70
+      ? tagline.slice(0, 70).trim() + '…'
+      : tagline
   }
 
   const nom = profile?.nom || 'Profil'
   const age = profile?.age ? `${profile.age} ans` : ''
-  const ville = profile?.ville?.nom ? `à ${profile.ville.nom}` : 'au Québec'
+  const ville = profile?.ville?.nom
+    ? `à ${profile.ville.nom}`
+    : 'au Québec'
 
   return `${nom}${age ? `, ${age}` : ''} ${ville} – RendezVous Québec`
 }
@@ -113,8 +107,10 @@ export function getProfileMetaDesc(profile: any): string {
 
   const nom = profile?.nom || 'Profil'
   const ville = profile?.ville?.nom || 'Québec'
+
   return `Découvrez ${nom} et d’autres profils à ${ville} sur RendezVous Québec.`
 }
+
 /* ────────────────────────────────────────────────────────────── */
 /*  COMMON PROFILE FIELDS                                        */
 /* ────────────────────────────────────────────────────────────── */
@@ -188,6 +184,8 @@ export const ALL_CITIES_QUERY = `
     nom,
     slug,
     region,
+    topContent,
+    bottomContent,
     "profileCount": count(
       *[_type == "profile" && ville._ref == ^._id]
     )
@@ -200,6 +198,8 @@ export const CITY_BY_SLUG_QUERY = `
     nom,
     slug,
     region,
+    topContent,
+    bottomContent,
     seoTitle,
     seoDescription
   }
@@ -217,6 +217,8 @@ export const ALL_CATEGORIES_QUERY = `
     slug,
     emoji,
     description,
+    topContent,
+    bottomContent,
     "profileCount": count(
       *[_type == "profile" && references(^._id)]
     )
@@ -230,6 +232,8 @@ export const CAT_BY_SLUG_QUERY = `
     slug,
     emoji,
     description,
+    topContent,
+    bottomContent,
     seoTitle,
     seoDescription
   }
@@ -251,7 +255,9 @@ export const SETTINGS_QUERY = `
     regionsSeoTitle,
     regionsSeoDescription
   }
-`/* ────────────────────────────────────────────────────────────── */
+`
+
+/* ────────────────────────────────────────────────────────────── */
 /*  TRANSLATIONS (UI TEXT)                                       */
 /* ────────────────────────────────────────────────────────────── */
 

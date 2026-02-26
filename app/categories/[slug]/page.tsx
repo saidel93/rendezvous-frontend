@@ -10,6 +10,7 @@ import Link from 'next/link'
 import type { Profile, Ville, Categorie } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 /* ───────────────────────────────────────────── */
 /* 🔥 Dynamic SEO                               */
@@ -25,7 +26,8 @@ export async function generateMetadata({
   try {
     const cat: Categorie | null = await client.fetch(
       CAT_BY_SLUG_QUERY,
-      { slug: params.slug }
+      { slug: params.slug },
+      { cache: 'no-store' }
     )
 
     if (!cat) return { title: 'Catégorie' }
@@ -40,8 +42,11 @@ export async function generateMetadata({
       `Trouvez des profils "${cat.nom}" au Québec.`
 
     if (searchParams?.city) {
-      const cities: Ville[] =
-        await client.fetch(ALL_CITIES_QUERY)
+      const cities: Ville[] = await client.fetch(
+        ALL_CITIES_QUERY,
+        {},
+        { cache: 'no-store' }
+      )
 
       const city = cities.find(
         (c) => c.slug.current === searchParams.city
@@ -80,13 +85,21 @@ export default async function CategoryPage({
 
   try {
     ;[profiles, cities, cat] = await Promise.all([
-      client.fetch(PROFILES_BY_CAT_QUERY, {
-        catSlug: params.slug,
-      }),
-      client.fetch(ALL_CITIES_QUERY),
-      client.fetch(CAT_BY_SLUG_QUERY, {
-        slug: params.slug,
-      }),
+      client.fetch(
+        PROFILES_BY_CAT_QUERY,
+        { catSlug: params.slug },
+        { cache: 'no-store' }
+      ),
+      client.fetch(
+        ALL_CITIES_QUERY,
+        {},
+        { cache: 'no-store' }
+      ),
+      client.fetch(
+        CAT_BY_SLUG_QUERY,
+        { slug: params.slug },
+        { cache: 'no-store' }
+      ),
     ])
   } catch (e) {
     console.error(e)
@@ -164,12 +177,7 @@ export default async function CategoryPage({
           </h1>
 
           {cat.description && (
-            <p
-              style={{
-                color: '#7c8590',
-                fontSize: '.9rem',
-              }}
-            >
+            <p style={{ color: '#7c8590', fontSize: '.9rem' }}>
               {cat.description}
             </p>
           )}
@@ -255,13 +263,7 @@ export default async function CategoryPage({
         </div>
 
         {/* PROFILES GRID */}
-        <p
-          style={{
-            color: 'white',
-            fontWeight: 600,
-            marginBottom: 20,
-          }}
-        >
+        <p style={{ color: 'white', fontWeight: 600, marginBottom: 20 }}>
           {filtered.length} profil
           {filtered.length !== 1 ? 's' : ''} trouvé
           {filtered.length !== 1 ? 's' : ''}
@@ -306,12 +308,7 @@ export default async function CategoryPage({
               whiteSpace: 'pre-wrap',
             }}
           >
-            <h2
-              style={{
-                color: 'white',
-                marginBottom: 16,
-              }}
-            >
+            <h2 style={{ color: 'white', marginBottom: 16 }}>
               À propos de {cat.nom}
             </h2>
             {cat.bottomContent}

@@ -14,7 +14,7 @@ export default function EmailGate({
 
   const handleSubmit = async () => {
     if (!email.includes('@')) {
-      alert('Veuillez entrer un email valide')
+      alert('Por favor introduce un email válido')
       return
     }
 
@@ -28,7 +28,7 @@ export default function EmailGate({
         profileName,
         city,
         country,
-        website: 'quebecrencontrex.com',
+        website: 'putasmadridx.es',
       }),
     })
 
@@ -39,7 +39,7 @@ export default function EmailGate({
 
   return (
     <>
-      {/* 🔥 RESTORED SEXY CTA BUTTON */}
+      {/* CTA BUTTON */}
       <button
         onClick={() => setOpen(true)}
         className="ctaBtn"
@@ -48,10 +48,8 @@ export default function EmailGate({
           width: '100%',
           padding: '18px',
           borderRadius: '14px',
-          background:
-            'linear-gradient(135deg,#e11d48,#9f1239)',
-          boxShadow:
-            '0 10px 30px rgba(225,29,72,.4)',
+          background: 'linear-gradient(135deg,#e11d48,#9f1239)',
+          boxShadow: '0 10px 30px rgba(225,29,72,.4)',
           color: '#fff',
           fontSize: '1.1rem',
           fontWeight: 700,
@@ -60,10 +58,10 @@ export default function EmailGate({
           cursor: 'pointer',
         }}
       >
-        🔒 Continuer sur la plateforme sécurisée
+        🔒 Continuar en la plataforma segura
       </button>
 
-      {/* 🔥 PREMIUM POPUP */}
+      {/* POPUP */}
       {open && (
         <div
           style={{
@@ -80,17 +78,14 @@ export default function EmailGate({
         >
           <div
             style={{
-              background:
-                'linear-gradient(135deg,#0f172a,#1e293b)',
+              background: 'linear-gradient(135deg,#0f172a,#1e293b)',
               padding: '40px',
               borderRadius: '22px',
               width: '90%',
               maxWidth: '450px',
               textAlign: 'center',
-              border:
-                '1px solid rgba(225,29,72,.3)',
-              boxShadow:
-                '0 30px 80px rgba(0,0,0,.6)',
+              border: '1px solid rgba(225,29,72,.3)',
+              boxShadow: '0 30px 80px rgba(0,0,0,.6)',
               animation: 'slideUp .3s ease',
             }}
           >
@@ -101,7 +96,7 @@ export default function EmailGate({
                 marginBottom: '10px',
               }}
             >
-              🔐 Accès Privé Sécurisé
+              🔐 Acceso privado seguro
             </h2>
 
             <p
@@ -111,15 +106,14 @@ export default function EmailGate({
                 marginBottom: '25px',
               }}
             >
-              {profileName} vous attend à {city}.
+              {profileName} te está esperando en {city}.
               <br />
-              Confirmez votre email pour accéder
-              immédiatement.
+              Confirma tu email para acceder inmediatamente.
             </p>
 
             <input
               type="email"
-              placeholder="Entrez votre email privé..."
+              placeholder="Introduce tu email privado..."
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               style={{
@@ -140,8 +134,7 @@ export default function EmailGate({
                 width: '100%',
                 padding: '15px',
                 borderRadius: '12px',
-                background:
-                  'linear-gradient(135deg,#e11d48,#be123c)',
+                background: 'linear-gradient(135deg,#e11d48,#be123c)',
                 color: '#fff',
                 fontWeight: 700,
                 border: 'none',
@@ -149,8 +142,8 @@ export default function EmailGate({
               }}
             >
               {loading
-                ? 'Vérification en cours...'
-                : '🔥 Accéder maintenant'}
+                ? 'Verificando...'
+                : '🔥 Acceder ahora'}
             </button>
 
             <p
@@ -160,11 +153,11 @@ export default function EmailGate({
                 color: '#94a3b8',
               }}
             >
-              ✔ 100% confidentiel
+              ✔ 100% confidencial
               <br />
-              ✔ Aucun spam
+              ✔ Sin spam
               <br />
-              ✔ Accès immédiat
+              ✔ Acceso inmediato
             </p>
           </div>
         </div>

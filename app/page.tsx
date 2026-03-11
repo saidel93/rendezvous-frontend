@@ -24,17 +24,17 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title:
         settings?.homeSeoTitle ??
-        'RendezVous Québec – Rencontres authentiques',
+        'Putas Madrid X – Encuentros reales en Madrid',
 
       description:
         settings?.homeSeoDescription ??
         settings?.siteDescription ??
-        'Rencontres au Québec.',
+        'Encuentra mujeres y encuentros en Madrid.',
     }
   } catch {
     return {
-      title: 'RendezVous Québec',
-      description: 'Rencontres au Québec.',
+      title: 'Putas Madrid X',
+      description: 'Encuentros y citas en Madrid.',
     }
   }
 }
@@ -106,7 +106,7 @@ export default async function HomePage() {
               lineHeight: 1.2,
             }}
           >
-            Trouvez votre <br />
+            Encuentra tu <br />
             <span
               style={{
                 background:
@@ -116,7 +116,7 @@ export default async function HomePage() {
                 fontStyle: 'italic',
               }}
             >
-              Âme Sœur ou votre Plan Cul au Québec
+              encuentro perfecto en Madrid
             </span>
           </h1>
 
@@ -127,7 +127,7 @@ export default async function HomePage() {
               color: '#7c8590',
             }}
           >
-            Des milliers de profils vérifiés.
+            Miles de perfiles disponibles cerca de ti.
           </p>
 
           <div
@@ -140,7 +140,7 @@ export default async function HomePage() {
             }}
           >
             <Link
-              href="/annonces"
+              href="/anuncios"
               style={{
                 background:
                   'linear-gradient(135deg,#e11d48,#9f1239)',
@@ -151,11 +151,11 @@ export default async function HomePage() {
                 textDecoration: 'none',
               }}
             >
-              ❤ Parcourir
+              ❤ Ver anuncios
             </Link>
 
             <Link
-              href="/regions"
+              href="/regiones"
               style={{
                 background: 'rgba(255,255,255,.05)',
                 border: '1px solid rgba(255,255,255,.1)',
@@ -165,7 +165,7 @@ export default async function HomePage() {
                 textDecoration: 'none',
               }}
             >
-              📍 Régions
+              📍 Regiones
             </Link>
           </div>
         </div>
@@ -194,7 +194,7 @@ export default async function HomePage() {
               fontWeight: 700,
             }}
           >
-            ⭐ Profils au hasard
+            ⭐ Perfiles al azar
           </h2>
 
           {featured.length > 0 ? (
@@ -218,7 +218,7 @@ export default async function HomePage() {
                 color: '#7c8590',
               }}
             >
-              Aucun profil disponible.
+              No hay perfiles disponibles.
             </div>
           )}
         </div>

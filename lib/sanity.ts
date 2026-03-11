@@ -2,9 +2,9 @@ import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
 import type { SiteSettings } from './types'
 
-/* ────────────────────────────────────────────────────────────── */
-/*  SANITY CLIENT                                                */
-/* ────────────────────────────────────────────────────────────── */
+/* ───────────────────────────────────────────── */
+/* SANITY CLIENT                                */
+/* ───────────────────────────────────────────── */
 
 export const client = createClient({
   projectId:
@@ -12,20 +12,18 @@ export const client = createClient({
   dataset:
     process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-01-01',
-  useCdn: false,
+  useCdn: false, // IMPORTANT for instant updates
 })
 
 const builder = imageUrlBuilder(client)
 export const urlFor = (source: any) => builder.image(source)
 
-/* ────────────────────────────────────────────────────────────── */
-/*  IMAGE HELPERS                                                */
-/* ────────────────────────────────────────────────────────────── */
+/* ───────────────────────────────────────────── */
+/* IMAGE HELPERS                                */
+/* ───────────────────────────────────────────── */
 
 export function getPhotoSrc(profile: any, w = 400, h = 500): string {
-  if (!profile?.photo?.asset?._ref) {
-    return '/placeholder.jpg'
-  }
+  if (!profile?.photo?.asset?._ref) return '/placeholder.jpg'
 
   return urlFor(profile.photo)
     .width(w)
@@ -48,9 +46,9 @@ export function getGalleryUrls(profile: any): string[] {
     )
 }
 
-/* ────────────────────────────────────────────────────────────── */
-/*  AFFILIATE                                                    */
-/* ────────────────────────────────────────────────────────────── */
+/* ───────────────────────────────────────────── */
+/* AFFILIATE                                    */
+/* ───────────────────────────────────────────── */
 
 export function getAffiliateUrl(
   profile: any,
@@ -59,12 +57,12 @@ export function getAffiliateUrl(
   return profile?.affiliateUrl || settings?.affiliateUrl || '#'
 }
 
-/* ────────────────────────────────────────────────────────────── */
-/*  SEO HELPERS                                                  */
-/* ────────────────────────────────────────────────────────────── */
+/* ───────────────────────────────────────────── */
+/* SEO HELPERS                                  */
+/* ───────────────────────────────────────────── */
 
 function firstWords(text: string, n = 20): string {
-  const clean = text.replace(/\s+/g, ' ').replace(/\n+/g, ' ').trim()
+  const clean = text.replace(/\s+/g, ' ').trim()
   if (!clean) return ''
 
   const words = clean.split(' ')
@@ -73,47 +71,30 @@ function firstWords(text: string, n = 20): string {
 }
 
 export function getProfileMetaTitle(profile: any): string {
-  const seoTitle = profile?.seoTitle?.trim()
-  if (seoTitle) return seoTitle
-
-  const hero = profile?.heroTitle?.trim()
-  if (hero) return hero
-
-  const tagline = profile?.tagline?.trim()
-  if (tagline) {
-    return tagline.length > 70
-      ? tagline.slice(0, 70).trim() + '…'
-      : tagline
-  }
+  if (profile?.seoTitle) return profile.seoTitle
+  if (profile?.heroTitle) return profile.heroTitle
+  if (profile?.tagline) return profile.tagline.slice(0, 70)
 
   const nom = profile?.nom || 'Profil'
-  const age = profile?.age ? `${profile.age} ans` : ''
+  const age = profile?.age ? `, ${profile.age}` : ''
   const ville = profile?.ville?.nom
     ? `à ${profile.ville.nom}`
     : 'au Québec'
 
-  return `${nom}${age ? `, ${age}` : ''} ${ville} – RendezVous Québec`
+  return `${nom}${age} ${ville} – RendezVous Québec`
 }
 
 export function getProfileMetaDesc(profile: any): string {
-  const seoDesc = profile?.seoDescription?.trim()
-  if (seoDesc) return seoDesc
+  if (profile?.seoDescription) return profile.seoDescription
+  if (profile?.bio) return firstWords(profile.bio, 20)
+  if (profile?.tagline) return profile.tagline
 
-  const bio = profile?.bio?.trim()
-  if (bio) return firstWords(bio, 20)
-
-  const tagline = profile?.tagline?.trim()
-  if (tagline) return tagline
-
-  const nom = profile?.nom || 'Profil'
-  const ville = profile?.ville?.nom || 'Québec'
-
-  return `Découvrez ${nom} et d’autres profils à ${ville} sur RendezVous Québec.`
+  return `Découvrez ${profile?.nom || 'ce profil'} sur RendezVous Québec.`
 }
 
-/* ────────────────────────────────────────────────────────────── */
-/*  COMMON PROFILE FIELDS                                        */
-/* ────────────────────────────────────────────────────────────── */
+/* ───────────────────────────────────────────── */
+/* COMMON PROFILE FIELDS                        */
+/* ───────────────────────────────────────────── */
 
 const PROFILE_FIELDS = `
   _id,
@@ -126,6 +107,7 @@ const PROFILE_FIELDS = `
   heroTitle,
   seoTitle,
   seoDescription,
+  bio,
   photo,
   photos,
   verifie,
@@ -137,45 +119,47 @@ const PROFILE_FIELDS = `
   affiliateUrl
 `
 
-/* ────────────────────────────────────────────────────────────── */
-/*  PROFILE QUERIES                                              */
-/* ────────────────────────────────────────────────────────────── */
+/* ───────────────────────────────────────────── */
+/* PROFILE QUERIES                              */
+/* ───────────────────────────────────────────── */
 
 export const ALL_PROFILES_QUERY = `
   *[_type == "profile"]
-  | order(_createdAt desc)
-  { ${PROFILE_FIELDS} }
-`
-
-export const FEATURED_QUERY = `
-  *[_type == "profile" && vedette == true]
-  | order(_createdAt desc)[0...8]
-  { ${PROFILE_FIELDS} }
-`
-
-export const PROFILE_BY_SLUG_QUERY = `
-  *[_type == "profile" && slug.current == $slug][0]{
-    ${PROFILE_FIELDS},
-    bio
-  }
-`
-
-export const PROFILES_BY_CITY_QUERY = `
-  *[_type == "profile" && ville->slug.current == $citySlug]
-  | order(_createdAt desc)
-  { ${PROFILE_FIELDS} }
-`
-
-export const PROFILES_BY_CAT_QUERY = `
-  *[_type == "profile" && references(*[_type=="categorie" && slug.current==$catSlug][0]._id)]
   | order(_createdAt desc){
     ${PROFILE_FIELDS}
   }
 `
 
-/* ────────────────────────────────────────────────────────────── */
-/*  CITIES                                                       */
-/* ────────────────────────────────────────────────────────────── */
+export const FEATURED_QUERY = `
+  *[_type == "profile" && vedette == true]
+  | order(_createdAt desc)[0...8]{
+    ${PROFILE_FIELDS}
+  }
+`
+
+export const PROFILE_BY_SLUG_QUERY = `
+  *[_type == "profile" && slug.current == $slug][0]{
+    ${PROFILE_FIELDS}
+  }
+`
+
+export const PROFILES_BY_CITY_QUERY = `
+  *[_type == "profile" && ville->slug.current == $citySlug]
+  | order(_createdAt desc){
+    ${PROFILE_FIELDS}
+  }
+`
+
+export const PROFILES_BY_CAT_QUERY = `
+  *[_type == "profile" && categorie->slug.current == $catSlug]
+  | order(_createdAt desc){
+    ${PROFILE_FIELDS}
+  }
+`
+
+/* ───────────────────────────────────────────── */
+/* CITIES                                       */
+/* ───────────────────────────────────────────── */
 
 export const ALL_CITIES_QUERY = `
   *[_type == "ville"]
@@ -183,7 +167,6 @@ export const ALL_CITIES_QUERY = `
     _id,
     nom,
     slug,
-    region,
     topContent,
     bottomContent,
     seoTitle,
@@ -207,9 +190,9 @@ export const CITY_BY_SLUG_QUERY = `
   }
 `
 
-/* ────────────────────────────────────────────────────────────── */
-/*  CATEGORIES                                                   */
-/* ────────────────────────────────────────────────────────────── */
+/* ───────────────────────────────────────────── */
+/* CATEGORIES                                   */
+/* ───────────────────────────────────────────── */
 
 export const ALL_CATEGORIES_QUERY = `
   *[_type == "categorie"]
@@ -224,7 +207,7 @@ export const ALL_CATEGORIES_QUERY = `
     seoTitle,
     seoDescription,
     "profileCount": count(
-      *[_type == "profile" && references(^._id)]
+      *[_type == "profile" && categorie._ref == ^._id]
     )
   }
 `
@@ -243,9 +226,9 @@ export const CAT_BY_SLUG_QUERY = `
   }
 `
 
-/* ────────────────────────────────────────────────────────────── */
-/*  SETTINGS                                                     */
-/* ────────────────────────────────────────────────────────────── */
+/* ───────────────────────────────────────────── */
+/* SETTINGS                                     */
+/* ───────────────────────────────────────────── */
 
 export const SETTINGS_QUERY = `
   *[_type == "settings" && _id == "site-settings"][0]{
@@ -261,35 +244,10 @@ export const SETTINGS_QUERY = `
   }
 `
 
-/* ────────────────────────────────────────────────────────────── */
-/*  TRANSLATIONS (UI TEXT)                                       */
-/* ────────────────────────────────────────────────────────────── */
+/* ───────────────────────────────────────────── */
+/* UI TEXTS (Singleton Table)                   */
+/* ───────────────────────────────────────────── */
 
-export const TRANSLATIONS_QUERY = `
-  *[_type == "translations" && _id == "translations-default"][0]{
-    header_home,
-    header_annonces,
-    header_regions,
-    header_tags,
-    header_blog,
-
-    home_mainTitle,
-    home_subTitle,
-    home_buttonExploreRegions,
-
-    section_randomProfiles,
-
-    profile_similarTitle,
-    profile_continueCta,
-
-    blog_title,
-    blog_subtitle,
-
-    footer_legal,
-    footer_privacy,
-    footer_terms,
-    footer_affiliateNotice,
-    footer_adultNotice,
-    footer_copyright
-  }
+export const UI_TEXTS_QUERY = `
+  *[_type == "uiTexts" && _id == "ui-texts"][0]
 `

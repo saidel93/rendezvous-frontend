@@ -4,7 +4,11 @@ import Link from 'next/link'
 import { client, ALL_CITIES_QUERY } from '@/lib/sanity'
 import type { Ville } from '@/lib/types'
 
-export default function Navbar() {
+export default function Navbar({
+  dict,
+}: {
+  dict: Record<string, string>
+}) {
   const [cities, setCities] = useState<Ville[]>([])
   const [mobileOpen, setMobileOpen] = useState(false)
   const [q, setQ] = useState('')
@@ -16,6 +20,9 @@ export default function Navbar() {
   }, [])
 
   const close = () => setMobileOpen(false)
+
+  const t = (key: string, fallback: string) =>
+    dict?.[key] || fallback
 
   const topBar: React.CSSProperties = {
     background: 'rgba(8,10,16,.99)',
@@ -37,7 +44,7 @@ export default function Navbar() {
   return (
     <nav style={{ position: 'sticky', top: 0, zIndex: 200, width: '100%' }}>
 
-      {/* ───────── TOP BAR ───────── */}
+      {/* TOP BAR */}
       <div style={topBar}>
         <div style={inner}>
 
@@ -64,7 +71,6 @@ export default function Navbar() {
                 justifyContent: 'center',
                 fontSize: 16,
                 boxShadow: '0 4px 18px rgba(225,29,72,.45)',
-                flexShrink: 0,
               }}
             >
               ❤️
@@ -82,15 +88,12 @@ export default function Navbar() {
                 whiteSpace: 'nowrap',
               }}
             >
-              Quebec Rencontre X
+              {t('site_name', 'Putas Madrid X')}
             </span>
           </Link>
 
           {/* Search */}
-          <div
-            className="nav-search"
-            style={{ flex: 1, maxWidth: 340, position: 'relative' }}
-          >
+          <div style={{ flex: 1, maxWidth: 340, position: 'relative' }}>
             <span
               style={{
                 position: 'absolute',
@@ -106,10 +109,13 @@ export default function Navbar() {
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Rechercher un profil, une ville..."
+              placeholder={t(
+                'search_placeholder',
+                'Buscar perfil o ciudad...'
+              )}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && q.trim()) {
-                  window.location.href = `/annonces?q=${encodeURIComponent(q)}`
+                  window.location.href = `/anuncios?q=${encodeURIComponent(q)}`
                   setQ('')
                 }
               }}
@@ -127,14 +133,7 @@ export default function Navbar() {
           </div>
 
           {/* Right side */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              flexShrink: 0,
-            }}
-          >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div
               style={{
                 background: 'rgba(34,197,94,.09)',
@@ -144,7 +143,6 @@ export default function Navbar() {
                 fontSize: '.77rem',
                 color: '#86efac',
                 fontWeight: 600,
-                whiteSpace: 'nowrap',
               }}
             >
               <span
@@ -157,16 +155,15 @@ export default function Navbar() {
                   marginRight: 4,
                 }}
               />
-
               <span suppressHydrationWarning>
                 {onlineCount !== null
-                  ? `${onlineCount} en ligne`
+                  ? `${onlineCount} ${t('online_label', 'en línea')}`
                   : '...'}
               </span>
             </div>
 
             <Link
-              href="/annonces"
+              href="/anuncios"
               style={{
                 background:
                   'linear-gradient(135deg,#e11d48,#9f1239)',
@@ -180,7 +177,7 @@ export default function Navbar() {
                 textDecoration: 'none',
               }}
             >
-              Rejoindre
+              {t('join_button', 'Entrar')}
             </Link>
 
             <button
@@ -199,12 +196,11 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* ───────── DESKTOP NAV ───────── */}
+      {/* DESKTOP NAV */}
       <div
         style={{
           background: 'rgba(8,10,16,.95)',
-          borderBottom:
-            '1px solid rgba(255,255,255,.05)',
+          borderBottom: '1px solid rgba(255,255,255,.05)',
         }}
       >
         <div
@@ -217,15 +213,25 @@ export default function Navbar() {
             alignItems: 'center',
           }}
         >
-          <Link href="/" style={navLink}>🏠 Accueil</Link>
-          <Link href="/annonces" style={navLink}>❤ Annonces</Link>
-          <Link href="/regions" style={navLink}>📍 Régions</Link>
-          <Link href="/categories" style={navLink}>💖 Catégories</Link>
-          <Link href="/blog" style={navLink}>📝 Blog</Link>
+          <Link href="/" style={navLink}>
+            🏠 {t('header_home', 'Inicio')}
+          </Link>
+          <Link href="/anuncios" style={navLink}>
+            ❤ {t('header_annonces', 'Anuncios')}
+          </Link>
+          <Link href="/regiones" style={navLink}>
+            📍 {t('header_regions', 'Regiones')}
+          </Link>
+          <Link href="/categorias" style={navLink}>
+            💖 {t('header_categories', 'Categorías')}
+          </Link>
+          <Link href="/blog" style={navLink}>
+            📝 {t('header_blog', 'Blog')}
+          </Link>
         </div>
       </div>
 
-      {/* ───────── MOBILE MENU ───────── */}
+      {/* MOBILE MENU */}
       {mobileOpen && (
         <div
           style={{
@@ -240,11 +246,11 @@ export default function Navbar() {
           }}
         >
           {[
-            { href: '/', label: '🏠 Accueil' },
-            { href: '/annonces', label: '❤ Annonces' },
-            { href: '/regions', label: '📍 Régions' },
-            { href: '/categories', label: '💖 Catégories' },
-            { href: '/blog', label: '📝 Blog' },
+            { href: '/', key: 'header_home', fallback: 'Inicio', icon: '🏠' },
+            { href: '/anuncios', key: 'header_annonces', fallback: 'Anuncios', icon: '❤' },
+            { href: '/regiones', key: 'header_regions', fallback: 'Regiones', icon: '📍' },
+            { href: '/categorias', key: 'header_categories', fallback: 'Categorías', icon: '💖' },
+            { href: '/blog', key: 'header_blog', fallback: 'Blog', icon: '📝' },
           ].map((item) => (
             <Link
               key={item.href}
@@ -258,7 +264,7 @@ export default function Navbar() {
                 borderBottom: '1px solid rgba(255,255,255,.05)',
               }}
             >
-              {item.label}
+              {item.icon} {t(item.key, item.fallback)}
             </Link>
           ))}
         </div>

@@ -9,9 +9,9 @@ import ProfileCard from '@/components/ProfileCard'
 import Link from 'next/link'
 import type { Profile, Ville, Categorie } from '@/lib/types'
 
-export const dynamic = 'force-dynamic' // 🔥 disable caching
+export const dynamic = 'force-dynamic'
 
-/* 🔥 Shuffle function */
+/* Shuffle function */
 function shuffle<T>(array: T[]): T[] {
   return [...array].sort(() => Math.random() - 0.5)
 }
@@ -21,19 +21,19 @@ export async function generateMetadata({
 }: {
   searchParams: { city?: string; cat?: string; q?: string }
 }): Promise<Metadata> {
-  let title = 'Toutes les annonces – Célibataires au Québec'
+  let title = 'Todos los anuncios – Contactos en Madrid'
   let desc =
-    'Parcourez des milliers de profils vérifiés à travers tout le Québec.'
+    'Explora miles de perfiles disponibles en Madrid y toda España.'
 
   if (searchParams.q) {
-    title = `Recherche "${searchParams.q}" – Annonces Québec`
-    desc = `Résultats pour "${searchParams.q}" parmi les célibataires du Québec.`
+    title = `Buscar "${searchParams.q}" – Anuncios Madrid`
+    desc = `Resultados para "${searchParams.q}" entre perfiles disponibles en Madrid.`
   }
 
   return { title, description: desc }
 }
 
-export default async function AnnoncesPage({
+export default async function AnunciosPage({
   searchParams,
 }: {
   searchParams: { city?: string; cat?: string; q?: string }
@@ -77,7 +77,7 @@ export default async function AnnoncesPage({
     )
   }
 
-  // 🔥 RANDOMIZE EVERY VISIT
+  // Randomize
   profiles = shuffle(profiles)
 
   return (
@@ -92,10 +92,11 @@ export default async function AnnoncesPage({
       >
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px' }}>
           <h1 style={{ fontSize: '2rem', color: 'white' }}>
-            Toutes les annonces
+            Todos los anuncios
           </h1>
+
           <p style={{ color: '#7c8590' }}>
-            {profiles.length} profil{profiles.length > 1 ? 's' : ''} trouvé
+            {profiles.length} perfil{profiles.length > 1 ? 'es' : ''} encontrado
           </p>
         </div>
       </div>
@@ -131,7 +132,7 @@ export default async function AnnoncesPage({
               </div>
             ) : (
               <div style={{ textAlign: 'center', padding: '80px 0' }}>
-                Aucun profil trouvé.
+                No se encontraron perfiles.
               </div>
             )}
           </div>
@@ -154,13 +155,13 @@ export default async function AnnoncesPage({
                   }}
                 >
                   <h3 style={{ color: '#fb7185', fontSize: '.8rem' }}>
-                    🏙️ Villes
+                    🏙️ Ciudades
                   </h3>
 
                   {cities.map((c) => (
                     <Link
                       key={c._id}
-                      href={`/annonces?city=${c.slug.current}`}
+                      href={`/anuncios?city=${c.slug.current}`}
                       style={{
                         display: 'block',
                         padding: '6px 0',
@@ -188,13 +189,13 @@ export default async function AnnoncesPage({
                   }}
                 >
                   <h3 style={{ color: '#fb7185', fontSize: '.8rem' }}>
-                    💝 Catégories
+                    💝 Categorías
                   </h3>
 
                   {cats.map((c) => (
                     <Link
                       key={c._id}
-                      href={`/annonces?cat=${c.slug.current}`}
+                      href={`/anuncios?cat=${c.slug.current}`}
                       style={{
                         display: 'block',
                         padding: '6px 0',

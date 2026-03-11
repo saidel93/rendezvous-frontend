@@ -9,7 +9,7 @@ export default function ProfileCard({ p }: { p: Profile }) {
 
   return (
     <Link
-      href={`/profil/${p.slug.current}`}
+      href={`/perfil/${p.slug.current}`}
       style={{
         textDecoration: 'none',
         display: 'block',
@@ -21,17 +21,17 @@ export default function ProfileCard({ p }: { p: Profile }) {
         position: 'relative'
       }}
     >
-      {/* Smaller photo */}
+      {/* Photo */}
       <div
         style={{
           position: 'relative',
-          aspectRatio: '1 / 1', // square → much smaller height
+          aspectRatio: '1 / 1',
           overflow: 'hidden'
         }}
       >
         <img
           src={photo}
-          alt={`${p.nom || 'Profil'}, ${p.age || ''} ans`}
+          alt={`${p.nom || 'Mujer sexy'}, ${p.age || ''} años`}
           style={{
             width: '100%',
             height: '100%',
@@ -40,7 +40,7 @@ export default function ProfileCard({ p }: { p: Profile }) {
           }}
         />
 
-        {/* Softer gradient */}
+        {/* Gradient */}
         <div
           style={{
             position: 'absolute',
@@ -50,7 +50,7 @@ export default function ProfileCard({ p }: { p: Profile }) {
           }}
         />
 
-        {/* Compact badges */}
+        {/* Badges */}
         <div
           style={{
             position: 'absolute',
@@ -84,7 +84,7 @@ export default function ProfileCard({ p }: { p: Profile }) {
                   borderRadius: '50%'
                 }}
               />
-              En ligne
+              En línea
             </span>
           )}
 
@@ -105,7 +105,7 @@ export default function ProfileCard({ p }: { p: Profile }) {
           )}
         </div>
 
-        {/* Smaller name block */}
+        {/* Name */}
         <div
           style={{
             position: 'absolute',
@@ -135,6 +135,7 @@ export default function ProfileCard({ p }: { p: Profile }) {
             >
               {p.nom}
             </span>
+
             <span
               style={{
                 color: 'rgba(255,255,255,.7)',
@@ -162,7 +163,7 @@ export default function ProfileCard({ p }: { p: Profile }) {
         </div>
       </div>
 
-      {/* Much smaller bottom section */}
+      {/* Bottom section */}
       <div style={{ padding: '6px 8px 8px' }}>
         <p
           style={{
@@ -176,7 +177,7 @@ export default function ProfileCard({ p }: { p: Profile }) {
             WebkitBoxOrient: 'vertical'
           }}
         >
-          {p.tagline}
+          {p.tagline || 'Buscando diversión sin compromiso'}
         </p>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>

@@ -16,31 +16,31 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title:
         settings?.categoriesSeoTitle ??
-        'Types de rencontres au Québec – Catégories',
+        'Tipos de encuentros en España – Categorías',
 
       description:
         settings?.categoriesSeoDescription ??
-        'Choisissez votre type de rencontre au Québec.',
+        'Elige el tipo de encuentro que buscas en Madrid y toda España.',
 
       openGraph: {
         title:
           settings?.categoriesSeoTitle ??
-          'Types de rencontres au Québec – Catégories',
+          'Tipos de encuentros en España – Categorías',
 
         description:
           settings?.categoriesSeoDescription ??
-          'Choisissez votre type de rencontre au Québec.',
+          'Elige el tipo de encuentro que buscas en Madrid y toda España.',
       },
     }
   } catch {
     return {
-      title: 'Catégories – RendezVous Québec',
-      description: 'Découvrez toutes les catégories.',
+      title: 'Categorías – Putas Madrid X',
+      description: 'Descubre todas las categorías disponibles.',
     }
   }
 }
 
-export default async function CategoriesPage() {
+export default async function CategoriasPage() {
   let cats: Categorie[] = []
 
   try {
@@ -68,9 +68,9 @@ export default async function CategoriesPage() {
           }}
         >
           <span style={{ color: '#3e444d', fontSize: '.78rem' }}>
-            Accueil ›{' '}
+            Inicio ›{' '}
             <span style={{ color: '#fb7185' }}>
-              Catégories
+              Categorías
             </span>
           </span>
 
@@ -82,7 +82,7 @@ export default async function CategoriesPage() {
               marginBottom: 6,
             }}
           >
-            Rencontres selon vos préférences
+            Encuentros según tus preferencias
           </h1>
 
           <p
@@ -91,7 +91,7 @@ export default async function CategoriesPage() {
               fontSize: '.9rem',
             }}
           >
-            Trouvez la catégorie parfaite pour vous.
+            Encuentra la categoría perfecta para ti.
           </p>
         </div>
       </div>
@@ -114,7 +114,7 @@ export default async function CategoriesPage() {
           {cats.map((c) => (
             <Link
               key={c._id}
-              href={`/categories/${c.slug.current}`}
+              href={`/categorias/${c.slug.current}`}
               style={{
                 background: 'rgba(21,25,32,.85)',
                 border:
@@ -173,7 +173,7 @@ export default async function CategoriesPage() {
                   fontWeight: 700,
                 }}
               >
-                {c.profileCount || 0} profils
+                {c.profileCount || 0} perfiles
               </span>
             </Link>
           ))}

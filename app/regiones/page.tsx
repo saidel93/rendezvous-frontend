@@ -16,31 +16,31 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title:
         settings?.regionsSeoTitle ??
-        'Régions – Rencontres par ville au Québec',
+        'Regiones – Encuentros por ciudad en España',
 
       description:
         settings?.regionsSeoDescription ??
-        'Explorez les rencontres par ville au Québec.',
+        'Explora encuentros y perfiles disponibles por ciudad en España.',
 
       openGraph: {
         title:
           settings?.regionsSeoTitle ??
-          'Régions – Rencontres par ville au Québec',
+          'Regiones – Encuentros por ciudad en España',
 
         description:
           settings?.regionsSeoDescription ??
-          'Explorez les rencontres par ville au Québec.',
+          'Explora encuentros y perfiles disponibles por ciudad en España.',
       },
     }
   } catch {
     return {
-      title: 'Régions – RendezVous Québec',
-      description: 'Découvrez les profils par ville.',
+      title: 'Regiones – Putas Madrid X',
+      description: 'Descubre perfiles por ciudad.',
     }
   }
 }
 
-export default async function RegionsPage() {
+export default async function RegionesPage() {
   let cities: Ville[] = []
 
   try {
@@ -61,7 +61,7 @@ export default async function RegionsPage() {
       >
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px' }}>
           <span style={{ color: '#3e444d', fontSize: '.8rem' }}>
-            Accueil › <span style={{ color: '#fb7185' }}>Régions</span>
+            Inicio › <span style={{ color: '#fb7185' }}>Regiones</span>
           </span>
 
           <h1
@@ -72,11 +72,11 @@ export default async function RegionsPage() {
               marginBottom: 8,
             }}
           >
-            📍 Régions du Québec
+            📍 Regiones de España
           </h1>
 
           <p style={{ color: '#7c8590' }}>
-            Trouvez des profils près de chez vous.
+            Encuentra perfiles cerca de ti.
           </p>
         </div>
       </div>
@@ -95,7 +95,7 @@ export default async function RegionsPage() {
             {cities.map((city) => (
               <Link
                 key={city._id}
-                href={`/regions/${city.slug.current}`}
+                href={`/regiones/${city.slug.current}`}
                 style={{
                   background: 'rgba(255,255,255,.04)',
                   border: '1px solid rgba(255,255,255,.08)',
@@ -122,7 +122,7 @@ export default async function RegionsPage() {
                     color: '#7c8590',
                   }}
                 >
-                  {city.profileCount || 0} profils disponibles
+                  {city.profileCount || 0} perfiles disponibles
                 </div>
               </Link>
             ))}
@@ -135,9 +135,9 @@ export default async function RegionsPage() {
               color: '#7c8590',
             }}
           >
-            Aucune ville trouvée.
+            No se encontraron ciudades.
             <br />
-            Vérifiez que vos villes sont publiées dans Sanity.
+            Verifica que tus ciudades estén publicadas en Sanity.
           </div>
         )}
       </div>

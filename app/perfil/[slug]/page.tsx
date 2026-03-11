@@ -13,7 +13,7 @@ import {
 import type { Profile, SiteSettings } from '@/lib/types'
 import { notFound } from 'next/navigation'
 import ProfileCard from '@/components/ProfileCard'
-import EmailGate from '@/components/EmailGate' // ✅ ADDED
+import EmailGate from '@/components/EmailGate'
 
 export const revalidate = 60
 
@@ -27,14 +27,14 @@ export async function generateMetadata({
       slug: params.slug,
     })
 
-    if (!p) return { title: 'Profil introuvable' }
+    if (!p) return { title: 'Perfil no encontrado' }
 
     const title = getProfileMetaTitle(p)
     const description = getProfileMetaDesc(p)
     const image = getPhotoSrc(p)
 
-    const ogAlt = `${p.nom}, ${p.age} ans`
-    const ogUrl = `/profil/${params.slug}`
+    const ogAlt = `${p.nom}, ${p.age} años`
+    const ogUrl = `/perfil/${params.slug}`
 
     return {
       title,
@@ -66,7 +66,7 @@ export async function generateMetadata({
       },
     }
   } catch {
-    return { title: 'Profil', description: 'Profil' }
+    return { title: 'Perfil', description: 'Perfil' }
   }
 }
 
@@ -125,8 +125,8 @@ export default async function ProfilePage({
     }
   `
 
-  const imgAlt = `${p.nom}, ${p.age} ans`
-  const h1Text = p.heroTitle || p.tagline || `${p.nom}, ${p.age} ans`
+  const imgAlt = `${p.nom}, ${p.age} años`
+  const h1Text = p.heroTitle || p.tagline || `${p.nom}, ${p.age} años`
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
@@ -156,7 +156,7 @@ export default async function ProfilePage({
             <h1 className="title">{h1Text}</h1>
 
             <div className="sub">
-              {p.age} ans {p.ville?.nom ? <>· 📍 {p.ville.nom}</> : null}
+              {p.age} años {p.ville?.nom ? <>· 📍 {p.ville.nom}</> : null}
             </div>
 
             {p.tagline ? (
@@ -167,13 +167,12 @@ export default async function ProfilePage({
 
             {p.bio ? <p className="bio">{p.bio}</p> : null}
 
-            {/* ✅ EMAIL GATE REPLACEMENT */}
             <div className="ctaBox">
               <EmailGate
                 affiliateUrl={affLink}
                 profileName={p.nom}
                 city={p.ville?.nom}
-                country="Canada"
+                country="España"
               />
             </div>
           </div>
@@ -181,7 +180,7 @@ export default async function ProfilePage({
 
         {sameCity.length > 0 && (
           <div>
-            <h3 className="relatedTitle">Profils similaires</h3>
+            <h3 className="relatedTitle">Perfiles similares</h3>
             <div className="relatedGrid">
               {sameCity.map((r) => (
                 <ProfileCard key={r._id} p={r} />

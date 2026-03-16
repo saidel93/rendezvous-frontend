@@ -9,12 +9,16 @@ import ProfileCard from '@/components/ProfileCard'
 import Link from 'next/link'
 import type { Profile, Ville, Categorie } from '@/lib/types'
 
-export const dynamic = 'force-dynamic' // 🔥 disable caching
+export const dynamic = 'force-dynamic'
 
 /* 🔥 Shuffle function */
 function shuffle<T>(array: T[]): T[] {
   return [...array].sort(() => Math.random() - 0.5)
 }
+
+/* ───────────────────────────────────────────── */
+/* SEO                                          */
+/* ───────────────────────────────────────────── */
 
 export async function generateMetadata({
   searchParams,
@@ -30,31 +34,43 @@ export async function generateMetadata({
     desc = `Résultats pour "${searchParams.q}" parmi les célibataires du Québec.`
   }
 
-  return { title, description: desc }
+  return {
+    title,
+    description: desc,
+  }
 }
+
+/* ───────────────────────────────────────────── */
+/* PAGE                                         */
+/* ───────────────────────────────────────────── */
 
 export default async function AnnoncesPage({
   searchParams,
 }: {
   searchParams: { city?: string; cat?: string; q?: string }
 }) {
-  let allProfiles: Profile[] = []
+  let profiles: Profile[] = []
   let cities: Ville[] = []
   let cats: Categorie[] = []
 
   try {
-    ;[allProfiles, cities, cats] = await Promise.all([
+    const [allProfiles, allCities, allCats] = await Promise.all([
       client.fetch(ALL_PROFILES_QUERY),
       client.fetch(ALL_CITIES_QUERY),
       client.fetch(ALL_CATEGORIES_QUERY),
     ])
+
+    profiles = allProfiles || []
+    cities = allCities || []
+    cats = allCats || []
   } catch (e) {
-    console.error(e)
+    console.error('Sanity fetch error:', e)
   }
 
-  let profiles = allProfiles || []
+  /* ───────────────────────────────────────────── */
+  /* FILTERS                                      */
+  /* ───────────────────────────────────────────── */
 
-  // Filters
   if (searchParams.city) {
     profiles = profiles.filter(
       (p) => p.ville?.slug?.current === searchParams.city
@@ -69,6 +85,7 @@ export default async function AnnoncesPage({
 
   if (searchParams.q) {
     const q = searchParams.q.toLowerCase()
+
     profiles = profiles.filter(
       (p) =>
         p.nom?.toLowerCase().includes(q) ||
@@ -77,8 +94,12 @@ export default async function AnnoncesPage({
     )
   }
 
-  // 🔥 RANDOMIZE EVERY VISIT
+  /* 🔥 Randomize */
   profiles = shuffle(profiles)
+
+  /* ───────────────────────────────────────────── */
+  /* PAGE                                         */
+  /* ───────────────────────────────────────────── */
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
@@ -94,6 +115,7 @@ export default async function AnnoncesPage({
           <h1 style={{ fontSize: '2rem', color: 'white' }}>
             Toutes les annonces
           </h1>
+
           <p style={{ color: '#7c8590' }}>
             {profiles.length} profil{profiles.length > 1 ? 's' : ''} trouvé
           </p>
@@ -136,7 +158,7 @@ export default async function AnnoncesPage({
             )}
           </div>
 
-          {/* DESKTOP SIDEBARS */}
+          {/* SIDEBARS */}
           <div className="desktop-sidebars">
             <div
               style={{
@@ -144,7 +166,7 @@ export default async function AnnoncesPage({
                 gap: 28,
               }}
             >
-              {/* LEFT */}
+              {/* LEFT SIDEBAR */}
               <div style={{ width: 250 }}>
                 <div
                   style={{
@@ -178,7 +200,7 @@ export default async function AnnoncesPage({
                 </div>
               </div>
 
-              {/* RIGHT */}
+              {/* RIGHT SIDEBAR */}
               <div style={{ width: 250 }}>
                 <div
                   style={{
@@ -216,14 +238,14 @@ export default async function AnnoncesPage({
         </div>
       </div>
 
-      {/* RESPONSIVE STYLE */}
+      {/* RESPONSIVE */}
       <style>
         {`
-          @media (max-width: 1200px) {
-            .desktop-sidebars {
-              display: none;
-            }
+        @media (max-width: 1200px) {
+          .desktop-sidebars {
+            display: none;
           }
+        }
         `}
       </style>
     </div>

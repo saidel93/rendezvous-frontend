@@ -1,8 +1,14 @@
+/* ───────────────────────────────────────────── */
+/* VILLE                                        */
+/* ───────────────────────────────────────────── */
+
 export interface Ville {
   _id: string
   nom: string
-  slug: { current: string }
-  region?: string
+  slug: {
+    current: string
+  }
+
   profileCount?: number
 
   /* 🔥 SEO CONTENT BLOCKS */
@@ -14,10 +20,17 @@ export interface Ville {
   seoDescription?: string
 }
 
+/* ───────────────────────────────────────────── */
+/* CATEGORIE                                    */
+/* ───────────────────────────────────────────── */
+
 export interface Categorie {
   _id: string
   nom: string
-  slug: { current: string }
+  slug: {
+    current: string
+  }
+
   emoji?: string
   description?: string
   profileCount?: number
@@ -31,9 +44,16 @@ export interface Categorie {
   seoDescription?: string
 }
 
+/* ───────────────────────────────────────────── */
+/* PROFILE                                      */
+/* ───────────────────────────────────────────── */
+
 export interface Profile {
   _id: string
-  slug: { current: string }
+
+  slug: {
+    current: string
+  }
 
   nom: string
   age: number
@@ -53,7 +73,7 @@ export interface Profile {
   photo?: any
   photos?: any[]
 
-  /* ⚠ Legacy (keep optional for safety) */
+  /* ⚠ Legacy (optional safety) */
   photoUrl?: string
   photosUrls?: { url: string; alt?: string }[]
 
@@ -71,6 +91,10 @@ export interface Profile {
   tags?: string[]
   affiliateUrl?: string
 }
+
+/* ───────────────────────────────────────────── */
+/* SITE SETTINGS                                */
+/* ───────────────────────────────────────────── */
 
 export interface SiteSettings {
   affiliateUrl?: string

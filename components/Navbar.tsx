@@ -4,7 +4,11 @@ import Link from 'next/link'
 import { client, ALL_CITIES_QUERY } from '@/lib/sanity'
 import type { Ville } from '@/lib/types'
 
-export default function Navbar() {
+export default function Navbar({
+  dict,
+}: {
+  dict: Record<string, string>
+}) {
   const [cities, setCities] = useState<Ville[]>([])
   const [mobileOpen, setMobileOpen] = useState(false)
   const [q, setQ] = useState('')
@@ -16,6 +20,9 @@ export default function Navbar() {
   }, [])
 
   const close = () => setMobileOpen(false)
+
+  const t = (key: string, fallback: string) =>
+    dict?.[key] || fallback
 
   const topBar: React.CSSProperties = {
     background: 'rgba(8,10,16,.99)',
@@ -64,7 +71,6 @@ export default function Navbar() {
                 justifyContent: 'center',
                 fontSize: 16,
                 boxShadow: '0 4px 18px rgba(225,29,72,.45)',
-                flexShrink: 0,
               }}
             >
               ❤️
@@ -82,15 +88,12 @@ export default function Navbar() {
                 whiteSpace: 'nowrap',
               }}
             >
-              Quebec Rencontre X
+              {t('site_name', 'Quebec Rencontre X')}
             </span>
           </Link>
 
           {/* Search */}
-          <div
-            className="nav-search"
-            style={{ flex: 1, maxWidth: 340, position: 'relative' }}
-          >
+          <div style={{ flex: 1, maxWidth: 340, position: 'relative' }}>
             <span
               style={{
                 position: 'absolute',
@@ -106,7 +109,10 @@ export default function Navbar() {
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Rechercher un profil, une ville..."
+              placeholder={t(
+                'search_placeholder',
+                'Rechercher un profil, une ville...'
+              )}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && q.trim()) {
                   window.location.href = `/annonces?q=${encodeURIComponent(q)}`
@@ -127,14 +133,7 @@ export default function Navbar() {
           </div>
 
           {/* Right side */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              flexShrink: 0,
-            }}
-          >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div
               style={{
                 background: 'rgba(34,197,94,.09)',
@@ -144,7 +143,6 @@ export default function Navbar() {
                 fontSize: '.77rem',
                 color: '#86efac',
                 fontWeight: 600,
-                whiteSpace: 'nowrap',
               }}
             >
               <span
@@ -157,10 +155,9 @@ export default function Navbar() {
                   marginRight: 4,
                 }}
               />
-
               <span suppressHydrationWarning>
                 {onlineCount !== null
-                  ? `${onlineCount} en ligne`
+                  ? `${onlineCount} ${t('online_label', 'en ligne')}`
                   : '...'}
               </span>
             </div>
@@ -180,7 +177,7 @@ export default function Navbar() {
                 textDecoration: 'none',
               }}
             >
-              Rejoindre
+              {t('join_button', 'Rejoindre')}
             </Link>
 
             <button
@@ -203,8 +200,7 @@ export default function Navbar() {
       <div
         style={{
           background: 'rgba(8,10,16,.95)',
-          borderBottom:
-            '1px solid rgba(255,255,255,.05)',
+          borderBottom: '1px solid rgba(255,255,255,.05)',
         }}
       >
         <div
@@ -217,11 +213,21 @@ export default function Navbar() {
             alignItems: 'center',
           }}
         >
-          <Link href="/" style={navLink}>🏠 Accueil</Link>
-          <Link href="/annonces" style={navLink}>❤ Annonces</Link>
-          <Link href="/regions" style={navLink}>📍 Régions</Link>
-          <Link href="/categories" style={navLink}>💖 Catégories</Link>
-          <Link href="/blog" style={navLink}>📝 Blog</Link>
+          <Link href="/" style={navLink}>
+            🏠 {t('header_home', 'Accueil')}
+          </Link>
+          <Link href="/annonces" style={navLink}>
+            ❤ {t('header_annonces', 'Annonces')}
+          </Link>
+          <Link href="/regions" style={navLink}>
+            📍 {t('header_regions', 'Régions')}
+          </Link>
+          <Link href="/categories" style={navLink}>
+            💖 {t('header_categories', 'Catégories')}
+          </Link>
+          <Link href="/blog" style={navLink}>
+            📝 {t('header_blog', 'Blog')}
+          </Link>
         </div>
       </div>
 
@@ -240,11 +246,11 @@ export default function Navbar() {
           }}
         >
           {[
-            { href: '/', label: '🏠 Accueil' },
-            { href: '/annonces', label: '❤ Annonces' },
-            { href: '/regions', label: '📍 Régions' },
-            { href: '/categories', label: '💖 Catégories' },
-            { href: '/blog', label: '📝 Blog' },
+            { href: '/', key: 'header_home', fallback: 'Accueil', icon: '🏠' },
+            { href: '/annonces', key: 'header_annonces', fallback: 'Annonces', icon: '❤' },
+            { href: '/regions', key: 'header_regions', fallback: 'Régions', icon: '📍' },
+            { href: '/categories', key: 'header_categories', fallback: 'Catégories', icon: '💖' },
+            { href: '/blog', key: 'header_blog', fallback: 'Blog', icon: '📝' },
           ].map((item) => (
             <Link
               key={item.href}
@@ -258,7 +264,7 @@ export default function Navbar() {
                 borderBottom: '1px solid rgba(255,255,255,.05)',
               }}
             >
-              {item.label}
+              {item.icon} {t(item.key, item.fallback)}
             </Link>
           ))}
         </div>

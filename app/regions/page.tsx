@@ -13,23 +13,20 @@ export async function generateMetadata(): Promise<Metadata> {
   try {
     const settings = await client.fetch(SETTINGS_QUERY)
 
+    const title =
+      settings?.regionsSeoTitle ??
+      'Régions – Rencontres par ville au Québec'
+
+    const description =
+      settings?.regionsSeoDescription ??
+      'Explorez les rencontres par ville au Québec.'
+
     return {
-      title:
-        settings?.regionsSeoTitle ??
-        'Régions – Rencontres par ville au Québec',
-
-      description:
-        settings?.regionsSeoDescription ??
-        'Explorez les rencontres par ville au Québec.',
-
+      title,
+      description,
       openGraph: {
-        title:
-          settings?.regionsSeoTitle ??
-          'Régions – Rencontres par ville au Québec',
-
-        description:
-          settings?.regionsSeoDescription ??
-          'Explorez les rencontres par ville au Québec.',
+        title,
+        description,
       },
     }
   } catch {
@@ -40,18 +37,23 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
+/* ───────────────────────────────────────────── */
+/* PAGE                                         */
+/* ───────────────────────────────────────────── */
+
 export default async function RegionsPage() {
   let cities: Ville[] = []
 
   try {
-    cities = await client.fetch(ALL_CITIES_QUERY)
+    const result = await client.fetch(ALL_CITIES_QUERY)
+    cities = result || []
   } catch (e) {
-    console.error(e)
+    console.error('Sanity cities fetch error:', e)
   }
 
   return (
     <div style={{ position: 'relative', zIndex: 1 }}>
-      {/* Header */}
+      {/* HEADER */}
       <div
         style={{
           padding: '60px 0 40px',
@@ -81,7 +83,7 @@ export default async function RegionsPage() {
         </div>
       </div>
 
-      {/* Cities Grid */}
+      {/* CITIES GRID */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px 80px' }}>
         {cities.length > 0 ? (
           <div

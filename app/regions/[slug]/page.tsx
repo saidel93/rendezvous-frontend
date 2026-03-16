@@ -28,7 +28,11 @@ export async function generateMetadata({
       { slug: params.slug }
     )
 
-    if (!city) return { title: 'Région' }
+    if (!city) {
+      return {
+        title: 'Région',
+      }
+    }
 
     let title =
       city.seoTitle ??
@@ -55,7 +59,10 @@ export async function generateMetadata({
     return {
       title,
       description,
-      openGraph: { title, description },
+      openGraph: {
+        title,
+        description,
+      },
     }
   } catch {
     return { title: 'Région' }
@@ -63,7 +70,7 @@ export async function generateMetadata({
 }
 
 /* ───────────────────────────────────────────── */
-/* 🔥 PAGE                                      */
+/* PAGE                                         */
 /* ───────────────────────────────────────────── */
 
 export default async function RegionPage({
@@ -78,7 +85,7 @@ export default async function RegionPage({
   let city: Ville | null = null
 
   try {
-    ;[profiles, cats, city] = await Promise.all([
+    const [p, c, cityData] = await Promise.all([
       client.fetch(PROFILES_BY_CITY_QUERY, {
         citySlug: params.slug,
       }),
@@ -87,11 +94,17 @@ export default async function RegionPage({
         slug: params.slug,
       }),
     ])
+
+    profiles = p || []
+    cats = c || []
+    city = cityData || null
   } catch (e) {
-    console.error(e)
+    console.error('Sanity region fetch error:', e)
   }
 
   if (!city) return null
+
+  /* 🔥 Filter by category */
 
   const filtered = searchParams?.cat
     ? profiles.filter(
@@ -254,7 +267,7 @@ export default async function RegionPage({
 
         {/* MAIN CONTENT */}
         <div>
-          {/* 🔥 TOP SEO CONTENT */}
+          {/* TOP SEO TEXT */}
           {city.topContent && (
             <div
               style={{
@@ -306,7 +319,7 @@ export default async function RegionPage({
             </div>
           )}
 
-          {/* 🔥 BOTTOM SEO CONTENT */}
+          {/* BOTTOM SEO TEXT */}
           {city.bottomContent && (
             <div
               style={{
@@ -328,6 +341,7 @@ export default async function RegionPage({
               >
                 Rencontres à {city.nom}
               </h2>
+
               {city.bottomContent}
             </div>
           )}

@@ -48,11 +48,10 @@ export default async function HomePage() {
   let featured: Profile[] = []
 
   try {
-    const [featuredProfiles] = await Promise.all([
-      client.fetch(FEATURED_QUERY),
-      client.fetch(ALL_CITIES_QUERY),
-      client.fetch(ALL_CATEGORIES_QUERY),
-    ])
+    const [featuredProfiles, uiTexts] = await Promise.all([
+  client.fetch(FEATURED_QUERY),
+  client.fetch(UI_TEXTS_QUERY),
+])
 
     featured = featuredProfiles || []
 
@@ -127,7 +126,7 @@ export default async function HomePage() {
               color: '#7c8590',
             }}
           >
-            Des milliers de profils vérifiés.
+           {uiTexts?.homeSubtitle ?? 'Des milliers de profils vérifiés.'}
           </p>
 
           <div
